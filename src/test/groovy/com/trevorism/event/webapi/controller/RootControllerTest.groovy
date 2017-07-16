@@ -1,6 +1,7 @@
-package com.trevorism.gcloud.webapi.controller
+package com.trevorism.event.webapi.controller
 
-import com.trevorism.gcloud.LocalAppEngineTestBase
+import com.trevorism.event.LocalAppEngineTestBase
+import com.trevorism.gcloud.webapi.controller.RootController
 import org.junit.Test
 
 /**

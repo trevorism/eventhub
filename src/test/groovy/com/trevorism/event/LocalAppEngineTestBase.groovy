@@ -1,4 +1,4 @@
-package com.trevorism.gcloud
+package com.trevorism.event
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper
