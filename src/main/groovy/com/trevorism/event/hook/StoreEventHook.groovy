@@ -8,7 +8,7 @@ import groovyx.net.http.HTTPBuilder
  */
 class StoreEventHook implements Hook{
 
-    private def http = new HTTPBuilder('https://events.walletinsights.com/trevor')
+    private def http = new HTTPBuilder('https://events.walletinsights.com/trevor/')
 
     @Override
     String getName() {
@@ -17,6 +17,7 @@ class StoreEventHook implements Hook{
 
     @Override
     void performAction(def data) {
-        http.post( path: '/', body: data, requestContentType: ContentType.JSON )
+        http.post( path: '', body: data, requestContentType: ContentType.JSON )
     }
+    
 }
