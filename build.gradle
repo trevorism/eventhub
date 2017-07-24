@@ -21,7 +21,7 @@ def appengineVersion = "1.9.54"
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.12'
     compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
-    compile 'com.google.apis:google-api-services-pubsub:v1-rev356-1.22.0'
+    compile 'com.google.apis:google-api-services-pubsub:v1-rev357-1.22.0'
 
     compile 'org.reflections:reflections:0.9.11'
     compile 'ch.qos.logback:logback-classic:1.2.3'

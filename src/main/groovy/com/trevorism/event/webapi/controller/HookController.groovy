@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType
 /**
  * @author tbrooks
  */
-@Path("/api/hooks")
-class HooksController {
+@Path("/api/hook")
+class HookController {
 
     @POST
     @Path("{name}")

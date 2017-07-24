@@ -10,7 +10,7 @@ import org.junit.Test
 class HooksControllerTest {
     @Test
     void testInvokeHook() {
-        HooksController hooksController = new HooksController()
+        HookController hooksController = new HookController()
         def data = ["trevor":"brooks", "age":33]
         hooksController.invokeHook("test", data)
 
