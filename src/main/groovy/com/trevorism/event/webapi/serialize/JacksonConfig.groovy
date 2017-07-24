@@ -14,9 +14,9 @@ import java.text.SimpleDateFormat
 @Provider
 class JacksonConfig implements ContextResolver<ObjectMapper> {
 
-    private final ObjectMapper objectMapper
+    static final ObjectMapper objectMapper
 
-    JacksonConfig() {
+    static {
         objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         objectMapper.setDateFormat(dateFormat)

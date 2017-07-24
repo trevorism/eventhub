@@ -8,3 +8,5 @@ How to create in gcloud:
 * gcloud config set project trevorism-eventhub
 * gcloud app create
 * gradle clean build appengineDeploy
+
+Set up a service account through API Manager

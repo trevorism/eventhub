@@ -30,6 +30,11 @@ class SubscriptionService {
         }
     }
 
+    String getSubscription(String subscriptionId) {
+        def response = pubsub.projects().subscriptions().get("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
+        return response
+    }
+
     boolean deleteSubscription(String subscription){
         try{
             def response = pubsub.projects().subscriptions().delete("projects/$PubsubProvider.PROJECT/subscriptions/${subscription}")
@@ -51,4 +56,6 @@ class SubscriptionService {
         subscription.setPushConfig(pushConfig)
         return subscription
     }
+
+
 }

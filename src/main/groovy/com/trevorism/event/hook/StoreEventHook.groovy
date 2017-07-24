@@ -12,7 +12,7 @@ class StoreEventHook implements Hook{
 
     @Override
     String getName() {
-        return "storeevent"
+        return "_store"
     }
 
     @Override

@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType
 /**
  * @author tbrooks
  */
-@Path("/api/hook")
+@Path("/hook")
 class HookController {
 
     @POST
