@@ -14,6 +14,6 @@ class HookRegistryTest {
         def registry = HookRegistry.INSTANCE.registry
 
         assert registry
-        assert registry["_store"] instanceof StoreEventHook
+        assert registry["store"] instanceof StoreEventHook
     }
 }

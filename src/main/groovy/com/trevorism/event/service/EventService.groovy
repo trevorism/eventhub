@@ -24,7 +24,7 @@ class EventService {
     private PublishRequest createPublishRequest(String topicName, Map<String, Object> data) {
         PubsubMessage pubsubMessage = new PubsubMessage()
         String json = JacksonConfig.objectMapper.writeValueAsString(data)
-        pubsubMessage.encodeData(ByteString.copyFromUtf8(json).toByteArray())
+        pubsubMessage.setData(json.bytes.encodeBase64().toString())
         pubsubMessage.setAttributes(["topic":topicName])
         PublishRequest publishRequest = new PublishRequest()
         publishRequest.setMessages([pubsubMessage])
