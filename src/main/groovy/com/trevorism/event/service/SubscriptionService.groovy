@@ -3,6 +3,7 @@ package com.trevorism.event.service
 import com.google.api.services.pubsub.Pubsub
 import com.google.api.services.pubsub.model.PushConfig
 import com.google.api.services.pubsub.model.Subscription
+import com.trevorism.event.model.Subscriber
 
 /**
  * @author tbrooks
@@ -11,11 +12,10 @@ class SubscriptionService {
 
     private Pubsub pubsub = PubsubProvider.INSTANCE.get()
 
-    boolean createSubscription(String topic, String subscriptionName, String pushEndpoint){
+    boolean createSubscription(Subscriber subscriber){
         try{
-            Subscription subscription = createSubscriptionConfig(topic, subscriptionName, pushEndpoint)
-
-            def response = pubsub.projects().subscriptions().create("projects/$PubsubProvider.PROJECT/topics/${topic}", subscription)
+            Subscription subscription = createSubscriptionConfig(subscriber)
+            def response = pubsub.projects().subscriptions().create("projects/$PubsubProvider.PROJECT/subscriptions/${subscriber.name}", subscription)
             response.execute()
         }catch (Exception ignored){
             return false
@@ -23,16 +23,17 @@ class SubscriptionService {
         return true
     }
 
-    List<String> getAllSubscriptions(String topic){
-        def response = pubsub.projects().subscriptions().list("projects/$PubsubProvider.PROJECT/topics/${topic}").execute()
+    List<Subscriber> getAllSubscriptions(){
+        def response = pubsub.projects().subscriptions().list("projects/$PubsubProvider.PROJECT").execute()
         response.getSubscriptions().collect { def subscription ->
-            subscription.substring("projects/trevorism-eventhub/subscriptions/".length())
+            Subscriber subscriber = createSubscriber(subscription)
+            return subscriber
         }
     }
 
-    String getSubscription(String subscriptionId) {
-        def response = pubsub.projects().subscriptions().get("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
-        return response
+    Subscriber getSubscription(String subscriptionId) {
+        def subscription = pubsub.projects().subscriptions().get("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
+        return createSubscriber(subscription)
     }
 
     boolean deleteSubscription(String subscription){
@@ -46,15 +47,24 @@ class SubscriptionService {
 
     }
 
-    private static Subscription createSubscriptionConfig(String topic, String subscriptionName, String pushEndpoint) {
+    private static Subscription createSubscriptionConfig(Subscriber subscriber) {
         PushConfig pushConfig = new PushConfig()
-        pushConfig.setPushEndpoint(pushEndpoint)
+        pushConfig.setPushEndpoint(subscriber.url)
 
         Subscription subscription = new Subscription()
-        subscription.setName(subscriptionName)
-        subscription.setTopic(topic)
+        subscription.setName(subscriber.name)
+        subscription.setTopic("projects/trevorism-eventhub/topics/$subscriber.topic")
         subscription.setPushConfig(pushConfig)
         return subscription
+    }
+
+    private Subscriber createSubscriber(Subscription subscription) {
+        Subscriber subscriber = new Subscriber()
+        subscriber.ackDeadlineSeconds = subscription.getAckDeadlineSeconds()
+        subscriber.name = subscription.getName().substring("projects/trevorism-eventhub/subscriptions/".length())
+        subscriber.url = subscription.getPushConfig().getPushEndpoint()
+        subscriber.topic = subscription.getTopic()
+        subscriber
     }
 
 

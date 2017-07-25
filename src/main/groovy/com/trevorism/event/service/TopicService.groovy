@@ -28,8 +28,8 @@ class TopicService {
     }
 
     String getTopic(String topic){
-        def response = pubsub.projects().topics().get("projects/$PubsubProvider.PROJECT").execute()
-        return response
+        def response = pubsub.projects().topics().get("projects/$PubsubProvider.PROJECT/topics/$topic").execute()
+        return response.get("name")
     }
 
     boolean deleteTopic(String topic){

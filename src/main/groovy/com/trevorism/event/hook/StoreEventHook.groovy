@@ -1,5 +1,6 @@
 package com.trevorism.event.hook
 
+import com.trevorism.event.model.ReceivedEvent
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 
@@ -16,8 +17,8 @@ class StoreEventHook implements Hook{
     }
 
     @Override
-    void performAction(def data) {
-        http.post( path: '', body: data, requestContentType: ContentType.JSON )
+    void performAction(ReceivedEvent data) {
+        http.post( path: '', body: data.message.data, requestContentType: ContentType.JSON )
     }
     
 }

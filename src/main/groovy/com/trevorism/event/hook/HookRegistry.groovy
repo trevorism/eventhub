@@ -7,9 +7,9 @@ import org.reflections.Reflections
  */
 class HookRegistry {
 
-    static HookRegistry INSTANCE = new HookRegistry()
+    static final HookRegistry INSTANCE = new HookRegistry()
 
-    private def registry = [:]
+    private final def registry = [:]
 
     private HookRegistry(){
         new Reflections( 'com.trevorism.event.hook' ).getSubTypesOf( Hook ).each {
@@ -22,4 +22,7 @@ class HookRegistry {
         return registry[name]
     }
 
+    Set<String> getAllHooks() {
+        registry.keySet()
+    }
 }

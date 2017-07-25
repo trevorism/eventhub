@@ -12,9 +12,9 @@ import com.google.api.services.pubsub.PubsubScopes
  */
 class PubsubProvider {
 
-    static String PROJECT = "trevorism-eventhub"
+    static final String PROJECT = "trevorism-eventhub"
+    static final PubsubProvider INSTANCE = new PubsubProvider()
 
-    static PubsubProvider INSTANCE = new PubsubProvider()
     private Pubsub pubsub = create()
     private PubsubProvider(){}
 
@@ -22,11 +22,11 @@ class PubsubProvider {
         return pubsub
     }
 
-    static Pubsub create() {
+    private static Pubsub create() {
         return getClient(Utils.getDefaultTransport(), Utils.getDefaultJsonFactory())
     }
 
-    static Pubsub getClient(final HttpTransport httpTransport, final JsonFactory jsonFactory) {
+    private static Pubsub getClient(final HttpTransport httpTransport, final JsonFactory jsonFactory) {
         GoogleCredential credential = GoogleCredential.getApplicationDefault()
         if (credential.createScopedRequired()) {
             credential = credential.createScoped(PubsubScopes.all())

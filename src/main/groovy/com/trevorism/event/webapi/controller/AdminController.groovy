@@ -45,30 +45,30 @@ class AdminController {
     }
 
     @GET
-    @Path("topic/{topicName}/subscription")
+    @Path("subscription")
     @Produces(MediaType.APPLICATION_JSON)
-    List<String> getSubscriptionsForTopic(@PathParam("topicName") String topicName){
-        subscriptionService.getAllSubscriptions(topicName)
+    List<Subscriber> getSubscriptions(){
+        subscriptionService.getAllSubscriptions()
     }
 
     @POST
-    @Path("topic/{topicName}/subscription")
+    @Path("subscription")
     @Consumes(MediaType.APPLICATION_JSON)
-    void createSubscription(String topic, Subscriber subscriber){
-        subscriptionService.createSubscription(topic, subscriber.name, subscriber.url)
+    void createSubscription(Subscriber subscriber){
+        subscriptionService.createSubscription(subscriber)
     }
 
     @GET
-    @Path("topic/{topicName}/subscription/{subscriptionId}")
+    @Path("subscription/{subscriptionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    String getSubscription(@PathParam("topicName") String topicName, @PathParam("subscriptionId") String subscriptionId){
+    String getSubscription(@PathParam("subscriptionId") String subscriptionId){
         subscriptionService.getSubscription(subscriptionId)
     }
 
     @DELETE
-    @Path("topic/{topicName}/subscription/{subscriptionId}")
+    @Path("subscription/{subscriptionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    String deleteSubscription(@PathParam("topicName") String topicName, @PathParam("subscriptionId") String subscriptionId){
+    String deleteSubscription(@PathParam("subscriptionId") String subscriptionId){
         subscriptionService.deleteSubscription(subscriptionId)
     }
 }
