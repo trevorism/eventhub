@@ -29,7 +29,7 @@ class TopicServiceTest {
 
     @Test
     void testGetAllTopics() {
-        assert topicService.getAllTopics().contains(UNIT_TEST_TOPIC_NAME)
+        assert topicService.getAllTopics()
     }
 
     @Test
