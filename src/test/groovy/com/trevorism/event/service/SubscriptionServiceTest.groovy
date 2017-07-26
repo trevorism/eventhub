@@ -23,6 +23,7 @@ class SubscriptionServiceTest {
 
     @After
     void tearDown() {
+        subscriptionService.deleteSubscription("test1")
         topicService.deleteTopic(UNIT_TEST_TOPIC_NAME)
     }
 
