@@ -61,7 +61,7 @@ class SubscriptionService {
     private Subscriber createSubscriber(Subscription subscription) {
         Subscriber subscriber = new Subscriber()
         subscriber.ackDeadlineSeconds = subscription.getAckDeadlineSeconds()
-        subscriber.name = subscription.getName().substring("projects/trevorism-eventhub/subscriptions/".length())
+        subscriber.name = subscription.getName().substring("projects/$PubsubProvider.PROJECT/subscriptions/".length())
         subscriber.url = subscription.getPushConfig().getPushEndpoint()
         subscriber.topic = subscription.getTopic()
         subscriber

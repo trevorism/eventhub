@@ -27,7 +27,7 @@ class SendEventController{
     @Consumes(MediaType.APPLICATION_JSON)
     boolean sendEvent(@PathParam("topic") String topic, Map<String, Object> data){
         topicService.createTopic(topic)
-        Subscriber subscriber = new Subscriber("_store", topic, "https://trevorism-eventhub.appspot.com/hook/store")
+        Subscriber subscriber = new Subscriber("store", topic, "https://trevorism-eventhub.appspot.com/hook/store")
         subscriptionService.createSubscription(subscriber)
         eventService.sendEvent(topic, data)
     }
