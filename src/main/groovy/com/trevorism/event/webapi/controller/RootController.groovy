@@ -21,7 +21,6 @@ class RootController {
     }
 
     @GET
-    @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getEndpoints(){
         return ["ping", "help"]
