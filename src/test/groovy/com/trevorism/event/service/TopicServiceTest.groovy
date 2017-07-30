@@ -29,6 +29,7 @@ class TopicServiceTest {
 
     @Test
     void testGetAllTopics() {
+        Thread.sleep(1000)
         assert topicService.getAllTopics()
     }
 

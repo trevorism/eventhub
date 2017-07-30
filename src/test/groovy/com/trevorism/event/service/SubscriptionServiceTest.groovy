@@ -36,6 +36,7 @@ class SubscriptionServiceTest {
 
     @Test
     void testGetAllSubscriptions() {
+        Thread.sleep(1000)
         def subscribers = subscriptionService.getAllSubscriptions()
         assert subscribers
     }
