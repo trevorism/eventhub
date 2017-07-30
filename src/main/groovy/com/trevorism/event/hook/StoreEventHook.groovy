@@ -9,7 +9,7 @@ import groovyx.net.http.HTTPBuilder
  */
 class StoreEventHook implements Hook{
 
-    private def http = new HTTPBuilder('https://events.walletinsights.com/trevor/')
+    private def http = new HTTPBuilder('http://datastore.trevorism.com/api/event/')
 
     @Override
     String getName() {
@@ -17,8 +17,15 @@ class StoreEventHook implements Hook{
     }
 
     @Override
-    void performAction(ReceivedEvent data) {
-        http.post( path: '', body: data.message.data, requestContentType: ContentType.JSON )
+    void performAction(ReceivedEvent event) {
+        def dataToStore = [:]
+        dataToStore["topic"] = event.message.attributes["topic"]
+        dataToStore["date"] = event.message.publishTime
+        dataToStore["subscription"] = event.subscription.subscription
+        dataToStore.putAll(event.message.data)
+
+
+        http.post( path: '', body: dataToStore, requestContentType: ContentType.JSON )
     }
     
 }
