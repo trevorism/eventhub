@@ -44,14 +44,7 @@ class TestResultEmailHook implements Hook{
     }
 
     private static String buildMessage(def data) {
-        """Test failed for scenario: ${data.name}
-
-${data?.given}
-${data?.when}
-${data?.then}
-
-${data?.errorMessage}"""
-
+        "Test failed for scenario: ${data.name}\n\n${data?.given}\n${data?.when}\n${data?.then}\n\n${data?.errorMessage}"
     }
 
     private void ping() {
