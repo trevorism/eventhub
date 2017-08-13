@@ -1,15 +1,16 @@
 package com.trevorism.event.hook
 
+import com.google.gson.Gson
 import com.trevorism.event.model.ReceivedEvent
-import groovyx.net.http.ContentType
-import groovyx.net.http.HTTPBuilder
+import com.trevorism.http.HttpClient
+import com.trevorism.http.JsonHttpClient
 
 /**
  * @author tbrooks
  */
 class TestResultEmailHook implements Hook{
 
-    private def http = new HTTPBuilder('https://email-dot-trevorism-gcloud.appspot.com/mail/')
+    HttpClient client = new JsonHttpClient()
 
     @Override
     String getName() {
@@ -23,8 +24,15 @@ class TestResultEmailHook implements Hook{
             return
 
         ping()
+        String json = createEmailJson(event)
+        client.post('https://email-dot-trevorism-gcloud.appspot.com/mail/', json)
+    }
+
+    private String createEmailJson(ReceivedEvent event) {
         def email = buildEmail(event)
-        http.post( path: '', body: email, requestContentType: ContentType.JSON )
+        Gson gson = new Gson()
+        String json = gson.toJson(email)
+        json
     }
 
     private static def buildEmail(ReceivedEvent event) {

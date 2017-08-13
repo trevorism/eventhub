@@ -1,15 +1,16 @@
 package com.trevorism.event.hook
 
+import com.google.gson.Gson
 import com.trevorism.event.model.ReceivedEvent
-import groovyx.net.http.ContentType
-import groovyx.net.http.HTTPBuilder
+import com.trevorism.http.HttpClient
+import com.trevorism.http.JsonHttpClient
 
 /**
  * @author tbrooks
  */
 class StoreEventHook implements Hook{
 
-    private def http = new HTTPBuilder('http://datastore.trevorism.com/api/event/')
+    HttpClient client = new JsonHttpClient()
 
     @Override
     String getName() {
@@ -24,8 +25,11 @@ class StoreEventHook implements Hook{
         dataToStore["subscription"] = event.subscription.subscription
         dataToStore.putAll(event.message.data)
 
+        Gson gson = new Gson()
+        String json = gson.toJson(dataToStore)
 
-        http.post( path: '', body: dataToStore, requestContentType: ContentType.JSON )
+        client.post("http://datastore.trevorism.com/api/event/",json)
+
     }
     
 }
