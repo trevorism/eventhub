@@ -38,10 +38,10 @@ GET /admin/topic -- Get all Topics<br/>
 GET /admin/topic/{topicName} -- Get FQDN of a topic<br/>
 POST /admin/topic/ -- Create a topic<br/>
 DELETE /admin/topic/{topicName} -- Delete a topic and all its subscriptions<br/>
-GET /admin/subscriptions -- Get all subscriptions<br/>
-GET /admin/subscriptions/{subscriptionName} -- Get subscription info<br/>
+GET /admin/subscription -- Get all subscriptions<br/>
+GET /admin/subscription/{subscriptionName} -- Get subscription info<br/>
 POST /admin/subscription -- Create a subscription on a topic<br/>
-DELETE /admin/subscriptions/{subscriptionName} -- Delete a subscription<br/>
+DELETE /admin/subscription/{subscriptionName} -- Delete a subscription<br/>
 
 """
     }

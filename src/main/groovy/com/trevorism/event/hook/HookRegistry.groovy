@@ -10,6 +10,7 @@ class HookRegistry {
 
     private HookRegistry(){
         registerHook(new StoreEventHook())
+        registerHook(new TestResultEmailHook())
     }
 
     void registerHook(Hook hook){
