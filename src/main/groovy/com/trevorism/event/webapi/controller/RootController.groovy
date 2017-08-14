@@ -23,7 +23,7 @@ class RootController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getEndpoints(){
-        return ["ping", "help"]
+        return ["ping", "help", "hook"]
     }
 
     @GET
