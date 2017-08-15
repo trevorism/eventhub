@@ -23,7 +23,7 @@ class RootController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getEndpoints(){
-        return ["ping", "help", "hook"]
+        return ["ping", "help", "hook", "admin"]
     }
 
     @GET
@@ -42,7 +42,6 @@ GET /admin/subscription -- Get all subscriptions<br/>
 GET /admin/subscription/{subscriptionName} -- Get subscription info<br/>
 POST /admin/subscription -- Create a subscription on a topic<br/>
 DELETE /admin/subscription/{subscriptionName} -- Delete a subscription<br/>
-
 """
     }
 }

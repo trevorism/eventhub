@@ -13,8 +13,14 @@ import javax.ws.rs.core.MediaType
 @Path("/admin")
 class AdminController {
 
-    TopicService topicService = new TopicService()
-    SubscriptionService subscriptionService = new SubscriptionService()
+    private TopicService topicService = new TopicService()
+    private SubscriptionService subscriptionService = new SubscriptionService()
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    List<String> getAdminEndpoints(){
+        ["topic","subscription"]
+    }
 
     @GET
     @Path("topic")

@@ -28,7 +28,7 @@ When(~/^I navigate to "([^"]*)"$/) { String url ->
 
 Then(~/^the API returns an array, letting me know where I can go next$/) { ->
     assert contextRootContent
-    assert contextRootContent == '["ping","help","hook"]'
+    assert contextRootContent == '["ping","help","hook","admin"]'
 }
 
 When(~/^I ping the application deployed to "([^"]*)"$/) { String url ->
