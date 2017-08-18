@@ -39,7 +39,7 @@ class AdminController {
     @POST
     @Path("topic")
     @Consumes(MediaType.APPLICATION_JSON)
-    void createTopic(String topic){
+    boolean createTopic(String topic){
         topicService.createTopic(topic)
     }
 
@@ -60,7 +60,7 @@ class AdminController {
     @POST
     @Path("subscription")
     @Consumes(MediaType.APPLICATION_JSON)
-    void createSubscription(Subscriber subscriber){
+    boolean createSubscription(Subscriber subscriber){
         subscriptionService.createSubscription(subscriber)
     }
 
