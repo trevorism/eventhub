@@ -2,7 +2,6 @@ package com.trevorism.eventhub
 
 import com.google.gson.Gson
 import com.trevorism.event.model.Subscriber
-import com.trevorism.http.BlankHttpClient
 import com.trevorism.http.HttpClient
 import com.trevorism.http.JsonHttpClient
 
@@ -15,9 +14,11 @@ this.metaClass.mixin(cucumber.api.groovy.EN)
 
 Gson gson = new Gson()
 String baseUrl = "http://event.trevorism.com"
-HttpClient blankHttpClient = new BlankHttpClient()
 HttpClient jsonHttpClient = new JsonHttpClient()
 String topicUnderTest
+
+String topicCreationResponse
+String subscriptionCreationResponse
 
 Given(~/^the topic "([^"]*)" does not exist$/) { String topic ->
     topicUnderTest = topic
@@ -26,7 +27,7 @@ Given(~/^the topic "([^"]*)" does not exist$/) { String topic ->
 
 Given(~/^the topic "([^"]*)" already exists or is created$/) { String topic ->
     topicUnderTest = topic
-    blankHttpClient.post("${baseUrl}/admin/topic", topic)
+    jsonHttpClient.post("${baseUrl}/admin/topic", topic)
 }
 
 Given(~/^the subscription "([^"]*)"  already exists or is created$/) { String subscription ->
@@ -35,7 +36,7 @@ Given(~/^the subscription "([^"]*)"  already exists or is created$/) { String su
 }
 
 When(~/^the topic "([^"]*)" is created$/) { String topic ->
-    blankHttpClient.post("${baseUrl}/admin/topic", topic)
+    topicCreationResponse = jsonHttpClient.post("${baseUrl}/admin/topic", topic)
 }
 
 When(~/^the subscription "([^"]*)" is deleted$/) { String subscription ->
@@ -43,7 +44,7 @@ When(~/^the subscription "([^"]*)" is deleted$/) { String subscription ->
 }
 
 When(~/^the subscription "([^"]*)" is created$/) { String subscription ->
-    Subscriber subscriber = new Subscriber(subscription, topicUnderTest, "http://event.trevorism.com/hook/store")
+    Subscriber subscriber = new Subscriber(subscription, topicUnderTest, "https://trevorism-eventhub.appspot.com/hook/store")
     jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber))
 }
 
@@ -53,29 +54,35 @@ When(~/^the topic "([^"]*)" is deleted$/) { String topic ->
 
 When(~/^a subscription with a malformed url is created$/) { ->
     Subscriber subscriber = new Subscriber("errorSubscription", topicUnderTest, "googlyboogly")
-    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber))
+    subscriptionCreationResponse = jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber))
 }
 
 Then(~/^the topic "([^"]*)" cannot be found$/) { String topic ->
+    Thread.sleep(1000)
     assert !jsonHttpClient.get("${baseUrl}/admin/topic").contains(topic)
 }
 
 Then(~/^the topic "([^"]*)" exists$/) { String topic ->
+    Thread.sleep(1000)
     assert jsonHttpClient.get("${baseUrl}/admin/topic/").contains(topic)
 }
 
 Then(~/^the subscription "([^"]*)" exists$/) { String subscription ->
+    Thread.sleep(1000)
     assert jsonHttpClient.get("${baseUrl}/admin/subscription/${subscription}").contains(subscription)
 }
 
 Then(~/^the subscription "([^"]*)" does not exist$/) { String subscription ->
+    Thread.sleep(1000)
     assert !jsonHttpClient.get("${baseUrl}/admin/subscription").contains(subscription)
 }
 
 Then(~/^an error is returned, indicating the topic already exists$/) { ->
-
+    Thread.sleep(1000)
+    assert topicCreationResponse == "false"
 }
 
 Then(~/^an error is returned, indicating the subscription could not be created$/) { ->
-
+    Thread.sleep(1000)
+    assert subscriptionCreationResponse == "false"
 }
