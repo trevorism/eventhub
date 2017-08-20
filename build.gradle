@@ -76,15 +76,6 @@ acceptance{
     finalizedBy("sendAcceptanceTestEvents")
 }
 
-
-appengine {
-    deploy {
-        version = 'v1'
-        project = "trevorism-eventhub"
-        stopPreviousVersion = true
-    }
-}
-
 check{
     dependsOn('jacocoTestReport')
 }
