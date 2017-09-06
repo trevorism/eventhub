@@ -58,27 +58,27 @@ When(~/^a subscription with a malformed url is created$/) { ->
 }
 
 Then(~/^the topic "([^"]*)" cannot be found$/) { String topic ->
-    Thread.sleep(1000)
+    Thread.sleep(2000)
     assert !jsonHttpClient.get("${baseUrl}/admin/topic").contains(topic)
 }
 
 Then(~/^the topic "([^"]*)" exists$/) { String topic ->
-    Thread.sleep(1000)
+    Thread.sleep(2000)
     assert jsonHttpClient.get("${baseUrl}/admin/topic/").contains(topic)
 }
 
 Then(~/^the subscription "([^"]*)" exists$/) { String subscription ->
-    Thread.sleep(1000)
+    Thread.sleep(2000)
     assert jsonHttpClient.get("${baseUrl}/admin/subscription/${subscription}").contains(subscription)
 }
 
 Then(~/^the subscription "([^"]*)" does not exist$/) { String subscription ->
-    Thread.sleep(1000)
+    Thread.sleep(2000)
     assert !jsonHttpClient.get("${baseUrl}/admin/subscription").contains(subscription)
 }
 
 Then(~/^an error is returned, indicating the topic already exists$/) { ->
-    Thread.sleep(1000)
+    Thread.sleep(2000)
     assert topicCreationResponse == "false"
 }
 

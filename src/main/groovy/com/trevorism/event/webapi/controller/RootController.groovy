@@ -11,8 +11,6 @@ import javax.ws.rs.core.MediaType
 @Path("/")
 class RootController {
 
-    private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService()
-
     @GET
     @Path("ping")
     @Produces(MediaType.APPLICATION_JSON)
