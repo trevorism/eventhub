@@ -25,17 +25,17 @@ String subscriptionCreationResponse
 
 Given(~/^the topic "([^"]*)" does not exist$/) { String topic ->
     topicUnderTest = topic
-    jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", ["Authorization":passwordProvider.password])
+    ResponseUtils.closeSilently jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", ["Authorization":passwordProvider.password])
 }
 
 Given(~/^the topic "([^"]*)" already exists or is created$/) { String topic ->
     topicUnderTest = topic
-    jsonHttpClient.post("${baseUrl}/admin/topic", topic, ["Authorization":passwordProvider.password])
+    ResponseUtils.closeSilently jsonHttpClient.post("${baseUrl}/admin/topic", topic, ["Authorization":passwordProvider.password])
 }
 
 Given(~/^the subscription "([^"]*)"  already exists or is created$/) { String subscription ->
     Subscriber subscriber = new Subscriber(subscription, topicUnderTest, "http://event.trevorism.com/hook/store")
-    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":passwordProvider.password])
+    ResponseUtils.closeSilently jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":passwordProvider.password])
 }
 
 When(~/^the topic "([^"]*)" is created$/) { String topic ->
@@ -43,16 +43,16 @@ When(~/^the topic "([^"]*)" is created$/) { String topic ->
 }
 
 When(~/^the subscription "([^"]*)" is deleted$/) { String subscription ->
-    jsonHttpClient.delete("${baseUrl}/admin/subscription/${subscription}", ["Authorization":passwordProvider.password])
+    ResponseUtils.closeSilently jsonHttpClient.delete("${baseUrl}/admin/subscription/${subscription}", ["Authorization":passwordProvider.password])
 }
 
 When(~/^the subscription "([^"]*)" is created$/) { String subscription ->
     Subscriber subscriber = new Subscriber(subscription, topicUnderTest, "https://trevorism-eventhub.appspot.com/hook/store")
-    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":passwordProvider.password])
+    ResponseUtils.closeSilently jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":passwordProvider.password])
 }
 
 When(~/^the topic "([^"]*)" is deleted$/) { String topic ->
-    jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", ["Authorization":passwordProvider.password])
+    ResponseUtils.closeSilently jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", ["Authorization":passwordProvider.password])
 }
 
 When(~/^a subscription with a malformed url is created$/) { ->

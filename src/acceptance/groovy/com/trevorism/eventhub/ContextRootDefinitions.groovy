@@ -1,7 +1,5 @@
 package com.trevorism.eventhub
 
-import cucumber.api.PendingException
-
 /**
  * @author tbrooks
  */
