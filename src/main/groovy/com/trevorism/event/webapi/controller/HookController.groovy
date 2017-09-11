@@ -3,6 +3,7 @@ package com.trevorism.event.webapi.controller
 import com.trevorism.event.hook.Hook
 import com.trevorism.event.hook.HookRegistry
 import com.trevorism.event.model.ReceivedEvent
+import com.trevorism.secure.Secure
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -14,6 +15,7 @@ import javax.ws.rs.core.MediaType
 class HookController {
 
     @POST
+    @Secure
     @Path("{name}")
     @Consumes(MediaType.APPLICATION_JSON)
     void invokeHook(@PathParam("name") String name, Map<String, Object> data) {

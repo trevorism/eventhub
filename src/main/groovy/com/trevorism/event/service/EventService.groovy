@@ -13,19 +13,19 @@ class EventService {
 
     private Pubsub pubsub = PubsubProvider.INSTANCE.get()
 
-    String sendEvent(String topicName, Map<String, Object> data){
-        PublishRequest publishRequest = createPublishRequest(topicName, data)
+    String sendEvent(String topicName, Map<String, Object> data, String correlationId){
+        PublishRequest publishRequest = createPublishRequest(topicName, data, correlationId)
         def publish = pubsub.projects().topics().publish("projects/$PubsubProvider.PROJECT/topics/${topicName}", publishRequest)
         def response = publish.execute()
         return response["messageIds"][0]
     }
 
 
-    private PublishRequest createPublishRequest(String topicName, Map<String, Object> data) {
+    private PublishRequest createPublishRequest(String topicName, Map<String, Object> data, String correlationId) {
         PubsubMessage pubsubMessage = new PubsubMessage()
         String json = JacksonConfig.objectMapper.writeValueAsString(data)
         pubsubMessage.setData(json.bytes.encodeBase64().toString())
-        pubsubMessage.setAttributes(["topic":topicName])
+        pubsubMessage.setAttributes(["topic":topicName,"correlationId":correlationId])
         PublishRequest publishRequest = new PublishRequest()
         publishRequest.setMessages([pubsubMessage])
         publishRequest

@@ -1,8 +1,5 @@
 package com.trevorism.event.webapi.controller
 
-import com.google.appengine.api.datastore.DatastoreService
-import com.google.appengine.api.datastore.DatastoreServiceFactory
-
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces

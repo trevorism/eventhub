@@ -3,6 +3,7 @@ package com.trevorism.event.webapi.controller
 import com.trevorism.event.model.Subscriber
 import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
+import com.trevorism.secure.Secure
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -30,6 +31,7 @@ class AdminController {
     }
 
     @GET
+    @Secure
     @Path("topic/{topicName}")
     @Produces(MediaType.APPLICATION_JSON)
     String getTopic(@PathParam("topicName") String topicName){
@@ -37,6 +39,7 @@ class AdminController {
     }
 
     @POST
+    @Secure
     @Path("topic")
     @Consumes(MediaType.APPLICATION_JSON)
     boolean createTopic(String topic){
@@ -44,6 +47,7 @@ class AdminController {
     }
 
     @DELETE
+    @Secure
     @Path("topic/{topicName}")
     @Produces(MediaType.APPLICATION_JSON)
     String deleteTopic(@PathParam("topicName") String topicName){
@@ -58,6 +62,7 @@ class AdminController {
     }
 
     @POST
+    @Secure
     @Path("subscription")
     @Consumes(MediaType.APPLICATION_JSON)
     boolean createSubscription(Subscriber subscriber){
@@ -65,6 +70,7 @@ class AdminController {
     }
 
     @GET
+    @Secure
     @Path("subscription/{subscriptionId}")
     @Produces(MediaType.APPLICATION_JSON)
     String getSubscription(@PathParam("subscriptionId") String subscriptionId){
@@ -72,6 +78,7 @@ class AdminController {
     }
 
     @DELETE
+    @Secure
     @Path("subscription/{subscriptionId}")
     @Produces(MediaType.APPLICATION_JSON)
     String deleteSubscription(@PathParam("subscriptionId") String subscriptionId){
