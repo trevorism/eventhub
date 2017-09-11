@@ -30,7 +30,7 @@ apply plugin: 'com.google.cloud.tools.appengine'
 apply plugin: "com.trevorism.gradle.acceptance"
 apply plugin: "com.trevorism.gradle.gae.deploy"
 
-version = "1"
+version = "2"
 group = "com.trevorism.eventhub"
 
 repositories {
