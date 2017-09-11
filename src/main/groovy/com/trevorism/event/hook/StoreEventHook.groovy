@@ -2,15 +2,16 @@ package com.trevorism.event.hook
 
 import com.google.gson.Gson
 import com.trevorism.event.model.ReceivedEvent
-import com.trevorism.http.HttpClient
-import com.trevorism.http.JsonHttpClient
+import com.trevorism.http.headers.HeadersHttpClient
+import com.trevorism.http.headers.HeadersJsonHttpClient
+import com.trevorism.secure.PasswordProvider
 
 /**
  * @author tbrooks
  */
 class StoreEventHook implements Hook{
 
-    HttpClient client = new JsonHttpClient()
+    HeadersHttpClient client = new HeadersJsonHttpClient()
 
     @Override
     String getName() {
@@ -25,8 +26,7 @@ class StoreEventHook implements Hook{
         Gson gson = new Gson()
         String json = gson.toJson(dataToStore)
 
-        client.post("http://datastore.trevorism.com/api/${topic}/",json)
-
+        client.post("http://datastore.trevorism.com/api/${topic}/",json, [Authorization:PasswordProvider.AUTHORIZATION_HEADER])
     }
 
     private def createDataForStorage(String topic, ReceivedEvent event) {

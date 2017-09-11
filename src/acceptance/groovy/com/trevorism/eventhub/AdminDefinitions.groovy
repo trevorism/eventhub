@@ -22,64 +22,62 @@ PasswordProvider passwordProvider = new PasswordProvider()
 
 String topicCreationResponse
 String subscriptionCreationResponse
-String authorizationHeader = PasswordProvider.AUTHORIZATION_HEADER
-
 
 Given(~/^the topic "([^"]*)" does not exist$/) { String topic ->
     topicUnderTest = topic
-    jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])
+    jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])
 }
 
 Given(~/^the topic "([^"]*)" already exists or is created$/) { String topic ->
     topicUnderTest = topic
-    jsonHttpClient.post("${baseUrl}/admin/topic", topic, [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])
+    jsonHttpClient.post("${baseUrl}/admin/topic", topic, ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])
 }
 
 Given(~/^the subscription "([^"]*)"  already exists or is created$/) { String subscription ->
     Subscriber subscriber = new Subscriber(subscription, topicUnderTest, "http://event.trevorism.com/hook/store")
-    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])
+    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])
 }
 
 When(~/^the topic "([^"]*)" is created$/) { String topic ->
-    topicCreationResponse = ResponseUtils.getEntity(jsonHttpClient.post("${baseUrl}/admin/topic", topic, [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER]))
+    topicCreationResponse = ResponseUtils.getEntity(jsonHttpClient.post("${baseUrl}/admin/topic", topic, ["Authorization":PasswordProvider.AUTHORIZATION_HEADER]))
 }
 
 When(~/^the subscription "([^"]*)" is deleted$/) { String subscription ->
-    jsonHttpClient.delete("${baseUrl}/admin/subscription/${subscription}", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])
+    jsonHttpClient.delete("${baseUrl}/admin/subscription/${subscription}", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])
 }
 
 When(~/^the subscription "([^"]*)" is created$/) { String subscription ->
     Subscriber subscriber = new Subscriber(subscription, topicUnderTest, "https://trevorism-eventhub.appspot.com/hook/store")
-    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])
+    jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])
 }
 
 When(~/^the topic "([^"]*)" is deleted$/) { String topic ->
-    jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])
+    jsonHttpClient.delete("${baseUrl}/admin/topic/${topic}", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])
 }
 
 When(~/^a subscription with a malformed url is created$/) { ->
     Subscriber subscriber = new Subscriber("errorSubscription", topicUnderTest, "googlyboogly")
-    subscriptionCreationResponse = ResponseUtils.getEntity(jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER]))
+    subscriptionCreationResponse = ResponseUtils.getEntity(jsonHttpClient.post("${baseUrl}/admin/subscription", gson.toJson(subscriber), ["Authorization":PasswordProvider.AUTHORIZATION_HEADER]))
 }
 
 Then(~/^the topic "([^"]*)" cannot be found$/) { String topic ->
     Thread.sleep(2000)
-    assert !ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/topic", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])).contains(topic)
+    assert !ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/topic", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])).contains(topic)
 }
 
 Then(~/^the topic "([^"]*)" exists$/) { String topic ->
     Thread.sleep(2000)
-    assert ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/topic/", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])).contains(topic)
+    assert ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/topic/", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])).contains(topic)
 }
 
 Then(~/^the subscription "([^"]*)" exists$/) { String subscription ->
     Thread.sleep(2000)
-    assert ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/subscription/${subscription}", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])).contains(subscription)
+    assert ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/subscription/${subscription}", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])).contains(subscription)
 }
 
 Then(~/^the subscription "([^"]*)" does not exist$/) { String subscription ->
     Thread.sleep(2000)
-    assert !ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/subscription", [authorizationHeader:PasswordProvider.AUTHORIZATION_HEADER])).contains(subscription)
+    assert !ResponseUtils.getEntity(jsonHttpClient.get("${baseUrl}/admin/subscription", ["Authorization":PasswordProvider.AUTHORIZATION_HEADER])).contains(subscription)
 }
 
 Then(~/^an error is returned, indicating the topic already exists$/) { ->
