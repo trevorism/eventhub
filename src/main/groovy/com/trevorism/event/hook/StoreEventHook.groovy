@@ -9,9 +9,10 @@ import com.trevorism.secure.PasswordProvider
 /**
  * @author tbrooks
  */
-class StoreEventHook implements Hook{
+class StoreEventHook implements Hook {
 
     HeadersHttpClient client = new HeadersJsonHttpClient()
+    PasswordProvider passwordProvider = new PasswordProvider()
 
     @Override
     String getName() {
@@ -26,7 +27,7 @@ class StoreEventHook implements Hook{
         Gson gson = new Gson()
         String json = gson.toJson(dataToStore)
 
-        client.post("http://datastore.trevorism.com/api/${topic}/",json, [Authorization:PasswordProvider.AUTHORIZATION_HEADER])
+        client.post("http://datastore.trevorism.com/api/${topic}/", json, [Authorization: passwordProvider.password])
     }
 
     private def createDataForStorage(String topic, ReceivedEvent event) {
