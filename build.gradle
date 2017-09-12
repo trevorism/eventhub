@@ -86,6 +86,7 @@ acceptance{
 appengine{
     deploy {
         project = "trevorism-eventhub"
+        version = "2"
         stopPreviousVersion = true
         promote = true
     }

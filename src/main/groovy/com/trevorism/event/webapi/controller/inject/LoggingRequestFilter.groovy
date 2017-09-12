@@ -16,10 +16,6 @@ class LoggingRequestFilter implements ContainerRequestFilter{
     @Override
     void filter(ContainerRequestContext requestContext) throws IOException {
         String correlationId = requestContext.getHeaderString(HeadersHttpClient.CORRELATION_ID_HEADER_KEY)
-        String output = ""
-        if(correlationId)
-            output = "${correlationId}: "
-
-        log.info("${output}Received a ${requestContext.getMethod()} request at ${requestContext.requestUri}")
+        log.info("CorrelationId: ${correlationId}")
     }
 }

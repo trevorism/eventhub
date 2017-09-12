@@ -13,7 +13,6 @@ class RootControllerTest extends LocalAppEngineTestBase{
         RootController rootController = new RootController()
         assert rootController.endpoints.contains("ping")
         assert rootController.endpoints.contains("help")
-        assert rootController.endpoints.contains("hook")
         assert rootController.endpoints.contains("admin")
     }
 
