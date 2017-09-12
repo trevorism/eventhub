@@ -26,8 +26,6 @@ class RootController {
     String help(){
         return """
 GET /ping -- Return pong if alive, gnop otherwise<br/>
-GET /hook -- Return all registered hooks<br/>
-POST /hook/{hookName} -- Invoke Hook<br/>
 POST /api/{topic} -- Send event to topic<br/>
 GET /admin/topic -- Get all Topics<br/>
 GET /admin/topic/{topicName} -- Get FQDN of a topic<br/>

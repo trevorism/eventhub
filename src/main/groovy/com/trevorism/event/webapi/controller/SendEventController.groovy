@@ -15,12 +15,15 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
+import java.util.logging.Logger
 
 /**
  * @author tbrooks
  */
 @Path("/api")
 class SendEventController{
+
+    private static final Logger log = Logger.getLogger(SendEventController.class.name)
 
     private final TopicService topicService = new TopicService()
     private final SubscriptionService subscriptionService = new SubscriptionService()
@@ -34,9 +37,11 @@ class SendEventController{
     @Produces(MediaType.APPLICATION_JSON)
     boolean sendEvent(@Context HttpHeaders headers, @PathParam("topic") String topic, Map<String, Object> data){
         topicService.createTopic(topic)
-        Subscriber subscriber = new Subscriber("store-${topic}", topic, "https://trevorism-eventhub.appspot.com/hook/store")
-        subscriptionService.createSubscription(subscriber)
-        eventService.sendEvent(topic, data, headers.getHeaderString(HeadersHttpClient.CORRELATION_ID_HEADER_KEY))
+        subscriptionService.createSubscription(new Subscriber("store-${topic}", topic, "https://listen-dot-trevorism-eventhub.appspot.com/_ah/push-handlers/store_${topic}"))
+        subscriptionService.createSubscription(new Subscriber("handle-${topic}", topic, "https://listen-dot-trevorism-eventhub.appspot.com/_ah/push-handlers/handle_${topic}"))
+        String response = eventService.sendEvent(topic, data, headers.getHeaderString(HeadersHttpClient.CORRELATION_ID_HEADER_KEY))
+        log.info("Sent event: ${data} with a response of: ${response}")
+        return response
     }
 
 }
