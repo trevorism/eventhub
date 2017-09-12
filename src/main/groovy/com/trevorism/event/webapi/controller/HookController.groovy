@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType
 class HookController {
 
     @POST
-    @Secure
     @Path("{name}")
     @Consumes(MediaType.APPLICATION_JSON)
     void invokeHook(@PathParam("name") String name, Map<String, Object> data) {
