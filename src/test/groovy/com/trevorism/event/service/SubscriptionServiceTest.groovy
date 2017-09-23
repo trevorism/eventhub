@@ -1,6 +1,8 @@
 package com.trevorism.event.service
 
 import com.trevorism.event.model.Subscriber
+import com.trevorism.event.pubsub.PubsubFacade
+import com.trevorism.event.pubsub.TestPubsubFacade
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -11,8 +13,20 @@ import org.junit.Test
 class SubscriptionServiceTest {
 
     private static final String UNIT_TEST_TOPIC_NAME = "unittest"
-    TopicService topicService = new TopicService()
-    SubscriptionService subscriptionService = new SubscriptionService()
+
+    private final TopicService topicService
+    private final SubscriptionService subscriptionService
+
+    SubscriptionServiceTest(){
+        topicService = new TopicService()
+        subscriptionService = new SubscriptionService()
+
+        PubsubFacade facade = new TestPubsubFacade()
+        topicService.facade = facade
+        subscriptionService.facade = facade
+    }
+
+
 
     @Before
     void setUp() {

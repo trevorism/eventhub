@@ -15,10 +15,13 @@ class PubsubProvider {
     static final String PROJECT = "trevorism-eventhub"
     static final PubsubProvider INSTANCE = new PubsubProvider()
 
-    private Pubsub pubsub = create()
+    private Pubsub pubsub
     private PubsubProvider(){}
 
     Pubsub get(){
+        if(!pubsub)
+            pubsub = create()
+
         return pubsub
     }
 

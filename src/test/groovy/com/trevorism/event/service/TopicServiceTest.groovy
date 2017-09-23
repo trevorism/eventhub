@@ -1,5 +1,7 @@
 package com.trevorism.event.service
 
+import com.trevorism.event.pubsub.PubsubFacade
+import com.trevorism.event.pubsub.TestPubsubFacade
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -10,7 +12,14 @@ import org.junit.Test
 class TopicServiceTest {
 
     public static final String UNIT_TEST_TOPIC_NAME = "unittest"
-    TopicService topicService = new TopicService()
+    private final TopicService topicService
+
+    TopicServiceTest(){
+        topicService = new TopicService()
+
+        PubsubFacade facade = new TestPubsubFacade()
+        topicService.facade = facade
+    }
 
     @Before
     void setUp() {

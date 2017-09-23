@@ -4,6 +4,8 @@ import com.google.api.services.pubsub.Pubsub
 import com.google.api.services.pubsub.model.PublishRequest
 import com.google.api.services.pubsub.model.PubsubMessage
 import com.google.appengine.repackaged.com.google.protobuf.ByteString
+import com.trevorism.event.pubsub.GaePubsubFacade
+import com.trevorism.event.pubsub.PubsubFacade
 import com.trevorism.event.webapi.serialize.JacksonConfig
 
 /**
@@ -11,11 +13,11 @@ import com.trevorism.event.webapi.serialize.JacksonConfig
  */
 class EventService {
 
-    private Pubsub pubsub = PubsubProvider.INSTANCE.get()
+    private PubsubFacade facade = new GaePubsubFacade()
 
     String sendEvent(String topicName, Map<String, Object> data, String correlationId){
         PublishRequest publishRequest = createPublishRequest(topicName, data, correlationId)
-        def publish = pubsub.projects().topics().publish("projects/$PubsubProvider.PROJECT/topics/${topicName}", publishRequest)
+        def publish = facade.publish("projects/$PubsubProvider.PROJECT/topics/${topicName}", publishRequest)
         def response = publish.execute()
         return response["messageIds"][0]
     }

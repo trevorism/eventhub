@@ -1,21 +1,22 @@
 package com.trevorism.event.service
 
-import com.google.api.services.pubsub.Pubsub
 import com.google.api.services.pubsub.model.PushConfig
 import com.google.api.services.pubsub.model.Subscription
 import com.trevorism.event.model.Subscriber
+import com.trevorism.event.pubsub.GaePubsubFacade
+import com.trevorism.event.pubsub.PubsubFacade
 
 /**
  * @author tbrooks
  */
 class SubscriptionService {
 
-    private Pubsub pubsub = PubsubProvider.INSTANCE.get()
+    private PubsubFacade facade = new GaePubsubFacade()
 
     boolean createSubscription(Subscriber subscriber){
         try{
             Subscription subscription = createSubscriptionConfig(subscriber)
-            def response = pubsub.projects().subscriptions().create("projects/$PubsubProvider.PROJECT/subscriptions/${subscriber.name}", subscription)
+            def response = facade.createSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscriber.name}", subscription)
             response.execute()
         }catch (Exception ignored){
             return false
@@ -24,7 +25,7 @@ class SubscriptionService {
     }
 
     List<Subscriber> getAllSubscriptions(){
-        def response = pubsub.projects().subscriptions().list("projects/$PubsubProvider.PROJECT").execute()
+        def response = facade.listSubscriptions("projects/$PubsubProvider.PROJECT").execute()
         response.getSubscriptions().collect { def subscription ->
             Subscriber subscriber = createSubscriber(subscription)
             return subscriber
@@ -32,13 +33,13 @@ class SubscriptionService {
     }
 
     Subscriber getSubscription(String subscriptionId) {
-        def subscription = pubsub.projects().subscriptions().get("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
+        def subscription = facade.getSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
         return createSubscriber(subscription)
     }
 
     boolean deleteSubscription(String subscription){
         try{
-            def response = pubsub.projects().subscriptions().delete("projects/$PubsubProvider.PROJECT/subscriptions/${subscription}")
+            def response = facade.deleteSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscription}")
             response.execute()
         }catch (Exception ignored){
             return false
