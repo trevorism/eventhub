@@ -87,3 +87,7 @@ appengine{
 check{
     dependsOn('jacocoTestReport')
 }
+
+task deliver{
+    dependsOn("appengineDeploy","acceptance")
+}
