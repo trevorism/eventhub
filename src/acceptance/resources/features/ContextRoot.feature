@@ -4,17 +4,17 @@ Feature: Context Root of Eventhub
   Scenario: ContextRoot
     Given the eventhub application is alive
     When I navigate to "http://event.trevorism.com"
-    Then the API returns an array, letting me know where I can go next
+    Then then a link to the help page is displayed
 
   Scenario: ContextRoot HTTPS
     Given the eventhub application is alive
     When I navigate to "https://event.trevorism.com"
-    Then the API returns an array, letting me know where I can go next
+    Then then a link to the help page is displayed
 
   Scenario: ContextRoot on app engine
     Given the eventhub application is alive
     When I navigate to "https://trevorism-eventhub.appspot.com"
-    Then the API returns an array, letting me know where I can go next
+    Then then a link to the help page is displayed
 
   Scenario: Ping
     Given the eventhub application is alive

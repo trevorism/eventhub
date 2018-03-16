@@ -24,9 +24,9 @@ When(~/^I navigate to "([^"]*)"$/) { String url ->
     contextRootContent = new URL(url).text
 }
 
-Then(~/^the API returns an array, letting me know where I can go next$/) { ->
+Then(~/^then a link to the help page is displayed$/) { ->
     assert contextRootContent
-    assert contextRootContent == '["ping","help","admin"]'
+    assert contextRootContent.contains("/help")
 }
 
 When(~/^I ping the application deployed to "([^"]*)"$/) { String url ->
