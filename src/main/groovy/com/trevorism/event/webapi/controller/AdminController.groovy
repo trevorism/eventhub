@@ -4,6 +4,8 @@ import com.trevorism.event.model.Subscriber
 import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
 import com.trevorism.secure.Secure
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -11,18 +13,21 @@ import javax.ws.rs.core.MediaType
 /**
  * @author tbrooks
  */
+@Api("Admin Operations")
 @Path("/admin")
 class AdminController {
 
     private TopicService topicService = new TopicService()
     private SubscriptionService subscriptionService = new SubscriptionService()
 
+    @ApiOperation(value = "Gets the admin endpoints")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     List<String> getAdminEndpoints(){
         ["topic","subscription"]
     }
 
+    @ApiOperation(value = "Gets all topics")
     @GET
     @Path("topic")
     @Produces(MediaType.APPLICATION_JSON)
@@ -30,6 +35,7 @@ class AdminController {
         topicService.getAllTopics()
     }
 
+    @ApiOperation(value = "Gets detailed topic information about {topicName} **Secure")
     @GET
     @Secure
     @Path("topic/{topicName}")
@@ -38,6 +44,7 @@ class AdminController {
         topicService.getTopic(topicName)
     }
 
+    @ApiOperation(value = "Create a new topic **Secure")
     @POST
     @Secure
     @Path("topic")
@@ -46,6 +53,7 @@ class AdminController {
         topicService.createTopic(topic)
     }
 
+    @ApiOperation(value = "Delete a topic by name **Secure")
     @DELETE
     @Secure
     @Path("topic/{topicName}")
@@ -54,6 +62,7 @@ class AdminController {
         topicService.deleteTopic(topicName)
     }
 
+    @ApiOperation(value = "Gets all subscriptions")
     @GET
     @Path("subscription")
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +70,7 @@ class AdminController {
         subscriptionService.getAllSubscriptions()
     }
 
+    @ApiOperation(value = "Create a new subscription **Secure")
     @POST
     @Secure
     @Path("subscription")
@@ -69,6 +79,7 @@ class AdminController {
         subscriptionService.createSubscription(subscriber)
     }
 
+    @ApiOperation(value = "Get detailed information about a subscription **Secure")
     @GET
     @Secure
     @Path("subscription/{subscriptionId}")
@@ -77,6 +88,7 @@ class AdminController {
         subscriptionService.getSubscription(subscriptionId)
     }
 
+    @ApiOperation(value = "Delete a subscription **Secure")
     @DELETE
     @Secure
     @Path("subscription/{subscriptionId}")

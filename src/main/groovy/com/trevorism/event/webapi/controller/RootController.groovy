@@ -1,10 +1,26 @@
 package com.trevorism.event.webapi.controller
 
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.Contact
+import io.swagger.annotations.Info
+import io.swagger.annotations.SwaggerDefinition
+
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
+@Api("Root Operations")
+@SwaggerDefinition(
+        info = @Info(
+                description = "API",
+                version = "1",
+                title = "Event API",
+                contact = @Contact(name = "Trevor Brooks", url = "http://www.trevorism.com")
+        )
+)
 @Path("/")
 class RootController {
 
@@ -15,26 +31,16 @@ class RootController {
         return "pong"
     }
 
+    @ApiOperation(value = "Context root of the application")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    List<String> getEndpoints(){
-        return ["ping", "help", "admin"]
+    String displayHelpLink(){
+        '<h1>API</h1><br/>Visit the help page at <a href="/help">/help'
     }
 
+    @ApiOperation(value = "Shows this help page")
     @GET
     @Path("help")
-    String help(){
-        return """
-GET /ping -- Return pong if alive, gnop otherwise<br/>
-POST /api/{topic} -- Send event to topic<br/>
-GET /admin/topic -- Get all Topics<br/>
-GET /admin/topic/{topicName} -- Get FQDN of a topic<br/>
-POST /admin/topic/ -- Create a topic<br/>
-DELETE /admin/topic/{topicName} -- Delete a topic and all its subscriptions<br/>
-GET /admin/subscription -- Get all subscriptions<br/>
-GET /admin/subscription/{subscriptionName} -- Get subscription info<br/>
-POST /admin/subscription -- Create a subscription on a topic<br/>
-DELETE /admin/subscription/{subscriptionName} -- Delete a subscription<br/>
-"""
+    Response help(){
+        Response.temporaryRedirect(new URI("/swagger/index.html")).build()
     }
 }

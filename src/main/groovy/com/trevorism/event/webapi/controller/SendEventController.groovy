@@ -6,6 +6,7 @@ import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
 import com.trevorism.http.headers.HeadersHttpClient
 import com.trevorism.secure.Secure
+import io.swagger.annotations.Api
 
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -20,6 +21,7 @@ import java.util.logging.Logger
 /**
  * @author tbrooks
  */
+@Api("Event Operations")
 @Path("/api")
 class SendEventController{
 

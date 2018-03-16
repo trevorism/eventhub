@@ -9,7 +9,7 @@ import com.trevorism.event.service.PubsubProvider
 /**
  * @author tbrooks
  */
-class GaePubsubFacade implements com.trevorism.event.pubsub.PubsubFacade {
+class GaePubsubFacade implements PubsubFacade {
 
 
     @Override

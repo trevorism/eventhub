@@ -15,7 +15,7 @@ this.metaClass.mixin(cucumber.api.groovy.Hooks)
 this.metaClass.mixin(cucumber.api.groovy.EN)
 
 Gson gson = new Gson()
-String baseUrl = "http://event.trevorism.com"
+String baseUrl = "https://event.trevorism.com"
 HeadersHttpClient jsonHttpClient = new HeadersJsonHttpClient()
 String topicUnderTest
 PasswordProvider passwordProvider = new PasswordProvider()
