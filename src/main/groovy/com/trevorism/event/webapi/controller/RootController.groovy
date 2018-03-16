@@ -18,12 +18,13 @@ import javax.ws.rs.core.Response
                 description = "API",
                 version = "1",
                 title = "Event API",
-                contact = @Contact(name = "Trevor Brooks", url = "http://www.trevorism.com")
+                contact = @Contact(name = "Trevor Brooks", url = "https://www.trevorism.com")
         )
 )
 @Path("/")
 class RootController {
 
+    @ApiOperation(value = "Returns pong if the application is alive")
     @GET
     @Path("ping")
     @Produces(MediaType.APPLICATION_JSON)

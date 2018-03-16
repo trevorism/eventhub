@@ -37,20 +37,21 @@ repositories {
 
 def appengineVersion = "1.9.62"
 def jerseyVersion = "2.26"
+def googleVersion = "1.23.0"
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.13'
     compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
-    compile 'com.google.apis:google-api-services-pubsub:v1-rev357-1.22.0'
+    compile "com.google.apis:google-api-services-pubsub:v1-rev379-$googleVersion"
 
-    compile 'com.google.api-client:google-api-client:1.22.0'
-    compile 'com.google.api-client:google-api-client-appengine:1.22.0'
-    compile 'com.google.api-client:google-api-client-servlet:1.22.0'
+    compile "com.google.api-client:google-api-client:$googleVersion"
+    compile "com.google.api-client:google-api-client-appengine:$googleVersion"
+    compile "com.google.api-client:google-api-client-servlet:$googleVersion"
 
     compile 'com.trevorism:http-utils:1.0.0'
     compile 'com.trevorism:secure-utils:1.0.0'
     compile 'org.apache.httpcomponents:httpclient:4.5.5'
-    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.code.gson:gson:2.8.2'
 
     compile "org.glassfish.jersey.containers:jersey-container-servlet:$jerseyVersion"
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion"

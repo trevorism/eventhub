@@ -7,6 +7,7 @@ import com.trevorism.event.service.TopicService
 import com.trevorism.http.headers.HeadersHttpClient
 import com.trevorism.secure.Secure
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -32,6 +33,7 @@ class SendEventController{
     private final EventService eventService = new EventService()
 
 
+    @ApiOperation(value = "Sends an event on the given topic **Secure")
     @POST
     @Secure
     @Path("{topic}")
