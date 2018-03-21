@@ -1,9 +1,7 @@
 package com.trevorism.event.service
 
-import com.google.api.services.pubsub.Pubsub
 import com.google.api.services.pubsub.model.PublishRequest
 import com.google.api.services.pubsub.model.PubsubMessage
-import com.google.appengine.repackaged.com.google.protobuf.ByteString
 import com.trevorism.event.pubsub.GaePubsubFacade
 import com.trevorism.event.pubsub.PubsubFacade
 import com.trevorism.event.webapi.serialize.JacksonConfig
