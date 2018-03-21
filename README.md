@@ -1,4 +1,7 @@
 # eventhub
-Send events, and register subscribers
 
-* gradle appengineRun -- Starts up a local instance
+A web api which wraps google pub/sub. Administer topics and subscriptions, send events.
+
+This API is deployed here: [https://event.trevorism.com](https://event.trevorism.com)
+
+
