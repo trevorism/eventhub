@@ -20,13 +20,6 @@ class AdminController {
     private TopicService topicService = new TopicService()
     private SubscriptionService subscriptionService = new SubscriptionService()
 
-    @ApiOperation(value = "Gets the admin endpoints")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    List<String> getAdminEndpoints(){
-        ["topic","subscription"]
-    }
-
     @ApiOperation(value = "Gets all topics")
     @GET
     @Path("topic")

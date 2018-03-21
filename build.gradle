@@ -59,6 +59,7 @@ dependencies {
     compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.9.4'
 
     compile 'io.swagger:swagger-jersey2-jaxrs:1.5.16'
+    compile 'org.slf4j:slf4j-nop:1.7.25'
 
     acceptanceCompile 'info.cukes:cucumber-groovy:1.2.5'
 

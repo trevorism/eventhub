@@ -13,8 +13,7 @@ class TopicService {
 
     boolean createTopic(String topic){
         try{
-            def response = facade.createTopic("projects/$PubsubProvider.PROJECT/topics/${topic}", new Topic())
-            response.execute()
+            facade.createTopic("projects/$PubsubProvider.PROJECT/topics/${topic}", new Topic()).execute()
         }catch (Exception ignored){
             return false
         }
@@ -30,13 +29,12 @@ class TopicService {
 
     String getTopic(String topic){
         def response = facade.getTopic("projects/$PubsubProvider.PROJECT/topics/$topic").execute()
-        return response.get("name")
+        return response?.get("name")
     }
 
     boolean deleteTopic(String topic){
         try{
-            def response = facade.deleteTopic("projects/$PubsubProvider.PROJECT/topics/${topic}")
-            response.execute()
+            facade.deleteTopic("projects/$PubsubProvider.PROJECT/topics/${topic}").execute()
         }catch (Exception ignored){
             return false
         }

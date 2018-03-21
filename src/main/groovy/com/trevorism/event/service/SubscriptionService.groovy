@@ -33,7 +33,7 @@ class SubscriptionService {
     }
 
     Subscriber getSubscription(String subscriptionId) {
-        def subscription = facade.getSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
+        Subscription subscription = facade.getSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
         return createSubscriber(subscription)
     }
 
@@ -59,7 +59,10 @@ class SubscriptionService {
         return subscription
     }
 
-    private Subscriber createSubscriber(Subscription subscription) {
+    private static Subscriber createSubscriber(Subscription subscription) {
+        if(!subscription)
+            return null
+
         Subscriber subscriber = new Subscriber()
         subscriber.ackDeadlineSeconds = subscription.getAckDeadlineSeconds()
         subscriber.name = subscription.getName().substring("projects/$PubsubProvider.PROJECT/subscriptions/".length())
