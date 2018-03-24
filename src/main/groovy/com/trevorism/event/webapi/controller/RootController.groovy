@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response
 @Api("Root Operations")
 @SwaggerDefinition(
         info = @Info(
-                description = "API",
+                description = "API for sending events and managing subscriptions to those events",
                 version = "1",
                 title = "Event API",
                 contact = @Contact(name = "Trevor Brooks", url = "https://www.trevorism.com")
