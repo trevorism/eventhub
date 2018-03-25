@@ -3,6 +3,7 @@ package com.trevorism.eventhub
 import com.google.gson.Gson
 import com.trevorism.data.FastDatastoreRepository
 import com.trevorism.data.Repository
+import com.trevorism.eventhub.model.TestTopic
 import com.trevorism.http.headers.HeadersHttpClient
 import com.trevorism.http.headers.HeadersJsonHttpClient
 import com.trevorism.http.util.ResponseUtils

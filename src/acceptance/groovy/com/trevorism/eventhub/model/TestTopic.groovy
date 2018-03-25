@@ -1,4 +1,4 @@
-package com.trevorism.eventhub
+package com.trevorism.eventhub.model
 
 import groovy.transform.Canonical
 
