@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.4'
-        classpath 'com.trevorism:gradle-acceptance-plugin:1.3.0'
+        classpath 'com.trevorism:gradle-acceptance-plugin:1.3.4'
         classpath 'com.trevorism:gradle-gae-deploy-plugin:1.1.1'
         classpath 'com.trevorism:gradle-release-plugin:0.3.0'
     }
@@ -57,7 +57,7 @@ dependencies {
     compile "org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion"
     compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.9.5'
 
-    compile 'io.swagger:swagger-jersey2-jaxrs:1.5.16'
+    compile 'io.swagger:swagger-jersey2-jaxrs:1.5.20'
     compile 'org.slf4j:slf4j-nop:1.7.25'
 
     acceptanceCompile 'info.cukes:cucumber-groovy:1.2.5'
