@@ -40,12 +40,14 @@ def googleVersion = "1.30.4"
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.5.8'
-    compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
-    compile "com.google.apis:google-api-services-pubsub:v1-rev425-1.25.0"
 
-    compile "com.google.api-client:google-api-client:$googleVersion"
-    compile "com.google.api-client:google-api-client-appengine:$googleVersion"
-    compile "com.google.api-client:google-api-client-servlet:$googleVersion"
+    compile 'com.google.cloud:google-cloud-pubsub:1.96.0'
+    compile 'com.google.auth:google-auth-library-oauth2-http:0.18.0'
+
+    //compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
+    //compile "com.google.api-client:google-api-client:$googleVersion"
+    //compile "com.google.api-client:google-api-client-appengine:$googleVersion"
+    //compile "com.google.api-client:google-api-client-servlet:$googleVersion"
 
     compile 'com.trevorism:http-utils:1.0.1'
     compile 'com.trevorism:secure-utils:1.0.1'
