@@ -1,9 +1,10 @@
 package com.trevorism.event.service
 
-import com.google.api.services.pubsub.model.PublishRequest
-import com.google.api.services.pubsub.model.PubsubMessage
-import com.trevorism.event.pubsub.GaePubsubFacade
-import com.trevorism.event.pubsub.PubsubFacade
+import com.google.api.core.ApiFuture
+import com.google.cloud.pubsub.v1.Publisher
+import com.google.protobuf.ByteString
+import com.google.pubsub.v1.ProjectTopicName
+import com.google.pubsub.v1.PubsubMessage
 import com.trevorism.event.webapi.serialize.JacksonConfig
 
 /**
@@ -11,23 +12,32 @@ import com.trevorism.event.webapi.serialize.JacksonConfig
  */
 class EventService {
 
-    private PubsubFacade facade = new GaePubsubFacade()
+    static final String PROJECT_ID = "trevorism-eventhub"
 
-    String sendEvent(String topicName, Map<String, Object> data, String correlationId){
-        PublishRequest publishRequest = createPublishRequest(topicName, data, correlationId)
-        def publish = facade.publish("projects/$PubsubProvider.PROJECT/topics/${topicName}", publishRequest)
-        def response = publish.execute()
-        return response["messageIds"][0]
-    }
-
-
-    private PublishRequest createPublishRequest(String topicName, Map<String, Object> data, String correlationId) {
-        PubsubMessage pubsubMessage = new PubsubMessage()
+    String sendEvent(String topicName, Map<String, Object> data, String correlationId) {
         String json = JacksonConfig.objectMapper.writeValueAsString(data)
-        pubsubMessage.setData(json.bytes.encodeBase64().toString())
-        pubsubMessage.setAttributes(["topic":topicName,"correlationId":correlationId])
-        PublishRequest publishRequest = new PublishRequest()
-        publishRequest.setMessages([pubsubMessage])
-        publishRequest
+        PubsubMessage pubsubMessage = createPubsubMessage(json, topicName, correlationId)
+        return sendMessage(topicName, pubsubMessage)
     }
+
+    private static String sendMessage(String topicName, PubsubMessage pubsubMessage) {
+        ProjectTopicName topic = ProjectTopicName.of(PROJECT_ID, topicName)
+        Publisher publisher = Publisher.newBuilder(topic).build()
+        ApiFuture<String> future = publisher.publish(pubsubMessage)
+        return future.get()
+    }
+
+    private static PubsubMessage createPubsubMessage(String json, String topicName, String correlationId) {
+        ByteString byteString = ByteString.copyFromUtf8(json)
+        def attributesMap = ["topic": topicName]
+        if(correlationId)
+            attributesMap.put("correlationId", correlationId)
+
+        PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
+                .setData(byteString)
+                .putAllAttributes(attributesMap)
+                .build()
+        return pubsubMessage
+    }
+
 }

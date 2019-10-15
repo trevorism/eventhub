@@ -1,7 +1,7 @@
 package com.trevorism.event.service
 
-import com.trevorism.event.pubsub.PubsubFacade
-import com.trevorism.event.pubsub.TestPubsubFacade
+import com.google.pubsub.v1.ProjectTopicName
+import com.google.pubsub.v1.Topic
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -13,12 +13,26 @@ class TopicServiceTest {
 
     public static final String UNIT_TEST_TOPIC_NAME = "unittest"
     private final TopicService topicService
+    boolean alreadyCreated = false
 
-    TopicServiceTest(){
+    TopicServiceTest() {
         topicService = new TopicService()
+        mockActualCalls(topicService)
+    }
 
-        PubsubFacade facade = new TestPubsubFacade()
-        topicService.facade = facade
+    private void mockActualCalls(TopicService topicService) {
+        topicService.topicAdminClient = [
+                createTopic: { name ->
+                    if (!alreadyCreated) {
+                        alreadyCreated = !alreadyCreated
+                    } else {
+                        throw new Exception()
+                    }
+
+                },
+                listTopics : { request -> new MockIterateAll() },
+                deleteTopic: { name -> throw new Exception() },
+                getTopic   : { name -> new MockName(name) }]
     }
 
     @Before
@@ -38,7 +52,6 @@ class TopicServiceTest {
 
     @Test
     void testGetAllTopics() {
-        Thread.sleep(1000)
         assert topicService.getAllTopics()
     }
 
@@ -51,4 +64,18 @@ class TopicServiceTest {
     void testDeleteTopic() {
         assert !topicService.deleteTopic("fffzzz")
     }
+
+    class MockName{
+        def name
+        MockName(ProjectTopicName name){
+            this.name = name.toString()
+        }
+    }
+
+    class MockIterateAll{
+        def iterateAll(){
+            return [new Topic()]
+        }
+    }
 }
+

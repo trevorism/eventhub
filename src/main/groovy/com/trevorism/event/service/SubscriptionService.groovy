@@ -1,73 +1,70 @@
 package com.trevorism.event.service
 
-import com.google.api.services.pubsub.model.PushConfig
-import com.google.api.services.pubsub.model.Subscription
+
+import com.google.cloud.pubsub.v1.SubscriptionAdminClient
+import com.google.pubsub.v1.*
 import com.trevorism.event.model.Subscriber
-import com.trevorism.event.pubsub.GaePubsubFacade
-import com.trevorism.event.pubsub.PubsubFacade
+
+import java.util.logging.Logger
 
 /**
  * @author tbrooks
  */
 class SubscriptionService {
 
-    private PubsubFacade facade = new GaePubsubFacade()
+    private SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient.create()
+    private static final Logger log = Logger.getLogger(SubscriptionService.class.name)
 
-    boolean createSubscription(Subscriber subscriber){
-        try{
-            Subscription subscription = createSubscriptionConfig(subscriber)
-            def response = facade.createSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscriber.name}", subscription)
-            response.execute()
-        }catch (Exception ignored){
+    boolean createSubscription(Subscriber subscriber) {
+        try {
+            ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, subscriber.topic)
+            ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(EventService.PROJECT_ID, subscriber.name)
+            PushConfig pushConfig = PushConfig.newBuilder().setPushEndpoint(subscriber.url).build()
+            return subscriptionAdminClient.createSubscription(subscriptionName, topicName, pushConfig, Integer.valueOf(subscriber.ackDeadlineSeconds));
+        } catch (Exception e) {
+            log.warning("Failed to create subscription: ${e.message}")
             return false
         }
-        return true
     }
 
-    List<Subscriber> getAllSubscriptions(){
-        def response = facade.listSubscriptions("projects/$PubsubProvider.PROJECT").execute()
-        response.getSubscriptions().collect { def subscription ->
-            Subscriber subscriber = createSubscriber(subscription)
-            return subscriber
+    List<Subscriber> getAllSubscriptions() {
+        ListSubscriptionsRequest listSubscriptionsRequest = ListSubscriptionsRequest.newBuilder().setProject(ProjectName.format(EventService.PROJECT_ID)).build()
+        List<Subscriber> subscribers = []
+        for (Subscription subscription : subscriptionAdminClient.listSubscriptions(listSubscriptionsRequest).iterateAll()) {
+            subscribers << createSubscriber(subscription)
         }
+        return subscribers
     }
 
     Subscriber getSubscription(String subscriptionId) {
-        Subscription subscription = facade.getSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscriptionId}").execute()
-        return createSubscriber(subscription)
+        try {
+            ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(EventService.PROJECT_ID, subscriptionId)
+            Subscription subscription = subscriptionAdminClient.getSubscription(subscriptionName)
+            return createSubscriber(subscription)
+        } catch (Exception e) {
+            log.warning("Unable to retrieve subscriptionId: ${subscriptionId} because ${e.message}")
+            return null
+        }
     }
 
-    boolean deleteSubscription(String subscription){
-        try{
-            def response = facade.deleteSubscription("projects/$PubsubProvider.PROJECT/subscriptions/${subscription}")
-            response.execute()
-        }catch (Exception ignored){
+    boolean deleteSubscription(String subscription) {
+        if (!getSubscription(subscription)) {
             return false
         }
+        ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(EventService.PROJECT_ID, subscription)
+        subscriptionAdminClient.deleteSubscription(subscriptionName)
         return true
-
-    }
-
-    private static Subscription createSubscriptionConfig(Subscriber subscriber) {
-        PushConfig pushConfig = new PushConfig()
-        pushConfig.setPushEndpoint(subscriber.url)
-
-        Subscription subscription = new Subscription()
-        subscription.setName(subscriber.name)
-        subscription.setTopic("projects/trevorism-eventhub/topics/$subscriber.topic")
-        subscription.setPushConfig(pushConfig)
-        return subscription
     }
 
     private static Subscriber createSubscriber(Subscription subscription) {
-        if(!subscription)
+        if (!subscription)
             return null
 
         Subscriber subscriber = new Subscriber()
         subscriber.ackDeadlineSeconds = subscription.getAckDeadlineSeconds()
-        subscriber.name = subscription.getName().substring("projects/$PubsubProvider.PROJECT/subscriptions/".length())
-        subscriber.url = subscription.getPushConfig().getPushEndpoint()
-        subscriber.topic = subscription.getTopic()
+        subscriber.name = subscription.name.substring("projects/${EventService.PROJECT_ID}/subscriptions/".length())
+        subscriber.url = subscription.getPushConfig().pushEndpoint
+        subscriber.topic = subscription.topic.substring("projects/${EventService.PROJECT_ID}/topics/".length())
         subscriber
     }
 

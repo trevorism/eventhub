@@ -13,7 +13,6 @@ class SubscriberTest {
         Subscriber subscriber2 = new Subscriber("red")
         Subscriber subscriber3 = new Subscriber("blue")
 
-
         assert subscriber1.equals(subscriber2)
         assert subscriber2.hashCode() == subscriber1.hashCode()
         assert subscriber1.toString() == subscriber2.toString()

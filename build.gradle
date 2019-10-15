@@ -36,18 +36,12 @@ repositories {
 
 def appengineVersion = "1.9.76"
 def jerseyVersion = "2.29.1"
-def googleVersion = "1.30.4"
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.5.8'
 
     compile 'com.google.cloud:google-cloud-pubsub:1.96.0'
     compile 'com.google.auth:google-auth-library-oauth2-http:0.18.0'
-
-    //compile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
-    //compile "com.google.api-client:google-api-client:$googleVersion"
-    //compile "com.google.api-client:google-api-client-appengine:$googleVersion"
-    //compile "com.google.api-client:google-api-client-servlet:$googleVersion"
 
     compile 'com.trevorism:http-utils:1.0.1'
     compile 'com.trevorism:secure-utils:1.0.1'
@@ -67,6 +61,7 @@ dependencies {
 
 	testCompile 'junit:junit:4.12'
 
+    testCompile "com.google.appengine:appengine-api-1.0-sdk:$appengineVersion"
     testCompile "com.google.appengine:appengine-testing:$appengineVersion"
     testCompile "com.google.appengine:appengine-api-stubs:$appengineVersion"
     testCompile "com.google.appengine:appengine-api-labs:$appengineVersion"

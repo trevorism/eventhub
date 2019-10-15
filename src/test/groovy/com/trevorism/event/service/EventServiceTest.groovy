@@ -1,6 +1,6 @@
 package com.trevorism.event.service
 
-import com.trevorism.event.pubsub.TestPubsubFacade
+import com.google.pubsub.v1.PubsubMessage
 import org.junit.Test
 
 /**
@@ -8,14 +8,18 @@ import org.junit.Test
  */
 class EventServiceTest {
 
-    EventService service
+    private EventService service
+
     EventServiceTest(){
         service = new EventService()
-        service.facade = new TestPubsubFacade()
     }
 
     @Test
-    void testSendEvent() {
-        assert "0" == service.sendEvent("unittest", null, null)
+    void testCreatePubsubMessage() {
+        PubsubMessage message = service.createPubsubMessage("{}","unitTestTopic","3")
+        assert message.getAttributesMap()["topic"] == "unitTestTopic"
+        assert message.getAttributesMap()["correlationId"] == "3"
+
+
     }
 }

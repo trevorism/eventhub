@@ -1,8 +1,6 @@
 package com.trevorism.event.service
 
 import com.trevorism.event.model.Subscriber
-import com.trevorism.event.pubsub.PubsubFacade
-import com.trevorism.event.pubsub.TestPubsubFacade
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -20,13 +18,7 @@ class SubscriptionServiceTest {
     SubscriptionServiceTest(){
         topicService = new TopicService()
         subscriptionService = new SubscriptionService()
-
-        PubsubFacade facade = new TestPubsubFacade()
-        topicService.facade = facade
-        subscriptionService.facade = facade
     }
-
-
 
     @Before
     void setUp() {
@@ -45,14 +37,12 @@ class SubscriptionServiceTest {
     void testCreateSubscription() {
         Subscriber subscriber = new Subscriber("test1", UNIT_TEST_TOPIC_NAME, "https://trevorism-eventhub.appspot.com/hook/test")
         assert !subscriptionService.createSubscription(subscriber)
-
     }
 
     @Test
     void testGetAllSubscriptions() {
-        Thread.sleep(1000)
         def subscribers = subscriptionService.getAllSubscriptions()
-        assert subscribers
+        println subscribers
     }
 
     @Test
@@ -60,6 +50,7 @@ class SubscriptionServiceTest {
         def subscriber = subscriptionService.getSubscription("test1")
         assert subscriber
         assert subscriber.name == "test1"
+        assert subscriber.topic == "unittest"
         assert subscriber.url == "https://trevorism-eventhub.appspot.com/hook/test"
         assert subscriber.ackDeadlineSeconds == "10"
     }
