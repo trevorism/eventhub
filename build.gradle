@@ -56,7 +56,8 @@ dependencies {
     compile 'io.swagger:swagger-jersey2-jaxrs:1.5.23'
     compile 'org.slf4j:slf4j-nop:1.7.28'
 
-    acceptanceCompile 'io.cucumber:cucumber-groovy:4.7.1'
+    //acceptanceCompile 'io.cucumber:cucumber-groovy:4.7.1'
+    acceptanceCompile 'info.cukes:cucumber-groovy:1.2.5'
     acceptanceCompile 'com.trevorism:datastore-client:1.2.0'
 
 	testCompile 'junit:junit:4.12'
