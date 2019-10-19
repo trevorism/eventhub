@@ -16,7 +16,6 @@ class TopicService {
     private def topicAdminClient = TopicAdminClient.create()
     private static final Logger log = Logger.getLogger(TopicService.class.name)
 
-
     boolean createTopic(String topicId) {
         try{
             ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, topicId)

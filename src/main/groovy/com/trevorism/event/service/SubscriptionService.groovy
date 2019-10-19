@@ -12,7 +12,7 @@ import java.util.logging.Logger
  */
 class SubscriptionService {
 
-    private SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient.create()
+    private def subscriptionAdminClient = SubscriptionAdminClient.create()
     private static final Logger log = Logger.getLogger(SubscriptionService.class.name)
 
     boolean createSubscription(Subscriber subscriber) {
@@ -20,7 +20,7 @@ class SubscriptionService {
             ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, subscriber.topic)
             ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(EventService.PROJECT_ID, subscriber.name)
             PushConfig pushConfig = PushConfig.newBuilder().setPushEndpoint(subscriber.url).build()
-            return subscriptionAdminClient.createSubscription(subscriptionName, topicName, pushConfig, Integer.valueOf(subscriber.ackDeadlineSeconds));
+            return subscriptionAdminClient.createSubscription(subscriptionName, topicName, pushConfig, Integer.valueOf(subscriber.ackDeadlineSeconds))
         } catch (Exception e) {
             log.warning("Failed to create subscription: ${e.message}")
             return false
@@ -39,7 +39,7 @@ class SubscriptionService {
     Subscriber getSubscription(String subscriptionId) {
         try {
             ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(EventService.PROJECT_ID, subscriptionId)
-            Subscription subscription = subscriptionAdminClient.getSubscription(subscriptionName)
+            def subscription = subscriptionAdminClient.getSubscription(subscriptionName)
             return createSubscriber(subscription)
         } catch (Exception e) {
             log.warning("Unable to retrieve subscriptionId: ${subscriptionId} because ${e.message}")
@@ -56,7 +56,7 @@ class SubscriptionService {
         return true
     }
 
-    private static Subscriber createSubscriber(Subscription subscription) {
+    private static Subscriber createSubscriber(def subscription) {
         if (!subscription)
             return null
 

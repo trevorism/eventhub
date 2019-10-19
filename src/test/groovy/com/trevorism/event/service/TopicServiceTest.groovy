@@ -17,10 +17,10 @@ class TopicServiceTest {
 
     TopicServiceTest() {
         topicService = new TopicService()
-        mockActualCalls(topicService)
+        mockActualCalls()
     }
 
-    private void mockActualCalls(TopicService topicService) {
+    private void mockActualCalls() {
         topicService.topicAdminClient = [
                 createTopic: { name ->
                     if (!alreadyCreated) {
@@ -30,8 +30,13 @@ class TopicServiceTest {
                     }
 
                 },
+                deleteTopic: { name ->
+                    if (name.toString().contains(UNIT_TEST_TOPIC_NAME)) {
+                        return true
+                    }
+                    throw new Exception()
+                },
                 listTopics : { request -> new MockIterateAll() },
-                deleteTopic: { name -> throw new Exception() },
                 getTopic   : { name -> new MockName(name) }]
     }
 
@@ -62,18 +67,20 @@ class TopicServiceTest {
 
     @Test
     void testDeleteTopic() {
+        assert topicService.deleteTopic(UNIT_TEST_TOPIC_NAME)
         assert !topicService.deleteTopic("fffzzz")
     }
 
-    class MockName{
+    class MockName {
         def name
-        MockName(ProjectTopicName name){
+
+        MockName(ProjectTopicName name) {
             this.name = name.toString()
         }
     }
 
-    class MockIterateAll{
-        def iterateAll(){
+    class MockIterateAll {
+        def iterateAll() {
             return [new Topic()]
         }
     }

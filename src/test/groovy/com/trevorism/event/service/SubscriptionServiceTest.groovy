@@ -10,53 +10,111 @@ import org.junit.Test
  */
 class SubscriptionServiceTest {
 
+    private static final String UNIT_TEST_SUBSCRIPTION_NAME = "test1"
     private static final String UNIT_TEST_TOPIC_NAME = "unittest"
 
-    private final TopicService topicService
     private final SubscriptionService subscriptionService
+    private boolean alreadyCreated = false
 
-    SubscriptionServiceTest(){
-        topicService = new TopicService()
+    SubscriptionServiceTest() {
         subscriptionService = new SubscriptionService()
+        mockActualCalls()
     }
+
+    private void mockActualCalls() {
+        subscriptionService.subscriptionAdminClient = [
+                createSubscription: { n, t, p, a ->
+                    if (!alreadyCreated) {
+                        alreadyCreated = !alreadyCreated
+                    } else {
+                        throw new Exception()
+                    }
+
+                },
+                deleteSubscription: { def name ->
+                    if (name.toString().contains(UNIT_TEST_SUBSCRIPTION_NAME)) {
+                        return true
+                    }
+                    return false
+                },
+                listSubscriptions : { request -> new MockIterateAll() },
+                getSubscription   : { name -> new MockSubscription(name) }]
+    }
+
 
     @Before
     void setUp() {
-        topicService.createTopic(UNIT_TEST_TOPIC_NAME)
-        Subscriber subscriber = new Subscriber("test1", UNIT_TEST_TOPIC_NAME, "https://trevorism-eventhub.appspot.com/hook/test")
+        Subscriber subscriber = new Subscriber(UNIT_TEST_SUBSCRIPTION_NAME, UNIT_TEST_TOPIC_NAME, "https://trevorism-eventhub.appspot.com/hook/test")
         subscriptionService.createSubscription(subscriber)
     }
 
     @After
     void tearDown() {
-        subscriptionService.deleteSubscription("test1")
-        topicService.deleteTopic(UNIT_TEST_TOPIC_NAME)
+        subscriptionService.deleteSubscription(UNIT_TEST_SUBSCRIPTION_NAME)
     }
 
     @Test
     void testCreateSubscription() {
-        Subscriber subscriber = new Subscriber("test1", UNIT_TEST_TOPIC_NAME, "https://trevorism-eventhub.appspot.com/hook/test")
+        Subscriber subscriber = new Subscriber(UNIT_TEST_SUBSCRIPTION_NAME, UNIT_TEST_TOPIC_NAME, "https://trevorism-eventhub.appspot.com/hook/test")
         assert !subscriptionService.createSubscription(subscriber)
     }
 
     @Test
     void testGetAllSubscriptions() {
         def subscribers = subscriptionService.getAllSubscriptions()
-        println subscribers
+        assert subscribers
     }
 
     @Test
     void testGetSubscription() {
-        def subscriber = subscriptionService.getSubscription("test1")
+        def subscriber = subscriptionService.getSubscription(UNIT_TEST_SUBSCRIPTION_NAME)
         assert subscriber
-        assert subscriber.name == "test1"
-        assert subscriber.topic == "unittest"
+        assert subscriber.name == UNIT_TEST_SUBSCRIPTION_NAME
+        assert subscriber.topic == UNIT_TEST_TOPIC_NAME
         assert subscriber.url == "https://trevorism-eventhub.appspot.com/hook/test"
         assert subscriber.ackDeadlineSeconds == "10"
     }
 
     @Test
     void testDeleteSubscription() {
-        assert subscriptionService.deleteSubscription("test1")
+        assert subscriptionService.deleteSubscription(UNIT_TEST_SUBSCRIPTION_NAME)
+        assert !subscriptionService.deleteSubscription("asdfdsaf")
     }
+
+    class MockIterateAll {
+        def iterateAll() {
+            return [[name_: "projects/${EventService.PROJECT_ID}/subscriptions/${UNIT_TEST_SUBSCRIPTION_NAME}".toString(),
+                    topic_: "projects/${EventService.PROJECT_ID}/topics/${UNIT_TEST_TOPIC_NAME}".toString()
+                    ]]
+        }
+    }
+
+    class MockSubscription {
+
+        def ackDeadlineSeconds
+        def name
+        def pushEndpoint
+        def topic
+
+        MockSubscription(def subName){
+            if(!subName.toString().contains(UNIT_TEST_SUBSCRIPTION_NAME))
+                throw new Exception()
+            name = subName.toString()
+            ackDeadlineSeconds = 10
+            pushEndpoint = "https://trevorism-eventhub.appspot.com/hook/test"
+            topic = "projects/${EventService.PROJECT_ID}/topics/${UNIT_TEST_TOPIC_NAME}"
+        }
+
+        def getPushConfig(){
+            return [pushEndpoint: pushEndpoint]
+        }
+    }
+
+    /*
+            subscriber.ackDeadlineSeconds = subscription.getAckDeadlineSeconds()
+        subscriber.name = subscription.name.substring("projects/${EventService.PROJECT_ID}/subscriptions/".length())
+        subscriber.url = subscription.getPushConfig().pushEndpoint
+        subscriber.topic = subscription.topic.substring("projects/${EventService.PROJECT_ID}/topics/".length())
+     */
+
 }
