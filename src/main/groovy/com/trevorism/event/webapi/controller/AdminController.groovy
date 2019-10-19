@@ -51,7 +51,7 @@ class AdminController {
     @Secure
     @Path("topic/{topicName}")
     @Produces(MediaType.APPLICATION_JSON)
-    String deleteTopic(@PathParam("topicName") String topicName){
+    boolean deleteTopic(@PathParam("topicName") String topicName){
         topicService.deleteTopic(topicName)
     }
 
@@ -77,7 +77,7 @@ class AdminController {
     @Secure
     @Path("subscription/{subscriptionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    String getSubscription(@PathParam("subscriptionId") String subscriptionId){
+    Subscriber getSubscription(@PathParam("subscriptionId") String subscriptionId){
         subscriptionService.getSubscription(subscriptionId)
     }
 
@@ -86,7 +86,7 @@ class AdminController {
     @Secure
     @Path("subscription/{subscriptionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    String deleteSubscription(@PathParam("subscriptionId") String subscriptionId){
+    boolean deleteSubscription(@PathParam("subscriptionId") String subscriptionId){
         subscriptionService.deleteSubscription(subscriptionId)
     }
 }

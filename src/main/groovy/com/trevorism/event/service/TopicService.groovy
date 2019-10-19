@@ -17,11 +17,11 @@ class TopicService {
     private static final Logger log = Logger.getLogger(TopicService.class.name)
 
     boolean createTopic(String topicId) {
-        try{
+        try {
             ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, topicId)
             Topic topic = topicAdminClient.createTopic(topicName)
             return topic
-        }catch(Exception e){
+        } catch (Exception e) {
             log.warning("Failed to create topic: ${e.message}")
             return false
         }
@@ -31,7 +31,7 @@ class TopicService {
         ListTopicsRequest listTopicsRequest = ListTopicsRequest.newBuilder().setProject(ProjectName.format(EventService.PROJECT_ID)).build()
         List<String> topics = []
         for (Topic topic : topicAdminClient.listTopics(listTopicsRequest).iterateAll()) {
-            topics << topic.name
+            topics << topic.name.substring("projects/${EventService.PROJECT_ID}/topics/".length())
         }
         return topics
     }
@@ -42,11 +42,11 @@ class TopicService {
     }
 
     boolean deleteTopic(String topic) {
-        try{
+        try {
             ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, topic)
             topicAdminClient.deleteTopic(topicName)
             return true
-        }catch(Exception e){
+        } catch (Exception e) {
             log.warning("Failed to delete topic: ${e.message}")
             return false
         }

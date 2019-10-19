@@ -81,7 +81,7 @@ class TopicServiceTest {
 
     class MockIterateAll {
         def iterateAll() {
-            return [new Topic()]
+            return [new Topic(name_: "projects/${EventService.PROJECT_ID}/topics/${UNIT_TEST_TOPIC_NAME}".toString())]
         }
     }
 }
