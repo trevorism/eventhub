@@ -8,14 +8,15 @@ import org.junit.Test
  */
 class EventServiceTest {
 
-
-
     @Test
     void testCreatePubsubMessage() {
-        PubsubMessage message = EventService.createPubsubMessage("{}","unitTestTopic","3")
+        PublisherRegistry publisherRegistry = new PublisherRegistry()
+        EventService eventService = new EventService(publisherRegistry);
+
+        PubsubMessage message = eventService.createPubsubMessage("{}","unitTestTopic","3")
         assert message.getAttributesMap()["topic"] == "unitTestTopic"
         assert message.getAttributesMap()["correlationId"] == "3"
 
-
+        publisherRegistry.shutdown()
     }
 }

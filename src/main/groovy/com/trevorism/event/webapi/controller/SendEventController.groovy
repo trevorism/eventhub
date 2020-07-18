@@ -2,6 +2,7 @@ package com.trevorism.event.webapi.controller
 
 import com.trevorism.event.model.Subscriber
 import com.trevorism.event.service.EventService
+import com.trevorism.event.service.PublisherRegistry
 import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
 import com.trevorism.http.headers.HeadersHttpClient
@@ -9,6 +10,7 @@ import com.trevorism.secure.Secure
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 
+import javax.annotation.PreDestroy
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
 import javax.ws.rs.Path
@@ -30,7 +32,8 @@ class SendEventController{
 
     private final TopicService topicService = new TopicService()
     private final SubscriptionService subscriptionService = new SubscriptionService()
-
+    private final PublisherRegistry publisherRegistry = new PublisherRegistry()
+    private final EventService eventService = new EventService(publisherRegistry)
 
     @ApiOperation(value = "Sends an event on the given topic **Secure")
     @POST
@@ -42,9 +45,15 @@ class SendEventController{
         topicService.createTopic(topic)
         subscriptionService.createSubscription(new Subscriber("store-${topic}", topic, "https://listen-dot-trevorism-eventhub.appspot.com/_ah/push-handlers/store_${topic}"))
         subscriptionService.createSubscription(new Subscriber("handle-${topic}", topic, "https://listen-dot-trevorism-eventhub.appspot.com/_ah/push-handlers/handle_${topic}"))
-        String response = EventService.sendEvent(topic, data, headers.getHeaderString(HeadersHttpClient.CORRELATION_ID_HEADER_KEY))
+        String response = eventService.sendEvent(topic, data, headers.getHeaderString(HeadersHttpClient.CORRELATION_ID_HEADER_KEY))
         log.info("Sent event: ${data}")
         return response
+    }
+
+    @PreDestroy
+    void preDestroy() {
+        log.info("Shutting down each registered event publisher")
+        publisherRegistry.shutdown()
     }
 
 }

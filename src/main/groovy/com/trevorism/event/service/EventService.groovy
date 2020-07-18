@@ -18,24 +18,26 @@ class EventService {
     static final String PROJECT_ID = "trevorism-eventhub"
     private static final Logger log = Logger.getLogger(EventService.class.name)
 
-    static String sendEvent(String topicName, Map<String, Object> data, String correlationId) {
+    private PublisherRegistry registry
+
+    EventService(){
+        this(new PublisherRegistry())
+    }
+    EventService(PublisherRegistry registry){
+        this.registry = registry
+    }
+
+    String sendEvent(String topicName, Map<String, Object> data, String correlationId) {
         String json = JacksonConfig.objectMapper.writeValueAsString(data)
         PubsubMessage pubsubMessage = createPubsubMessage(json, topicName, correlationId)
         return sendMessage(topicName, pubsubMessage)
     }
 
-    private static String sendMessage(String topicName, PubsubMessage pubsubMessage) {
-        Publisher publisher = null
-        try {
-            ProjectTopicName topic = ProjectTopicName.of(PROJECT_ID, topicName)
-            publisher = Publisher.newBuilder(topic).build()
-            log.info("Sending message to topic ${topicName}")
-            ApiFuture<String> future = publisher.publish(pubsubMessage)
-            return future.get()
-        } finally {
-            publisher?.shutdown()
-            publisher?.awaitTermination(1, TimeUnit.MINUTES)
-        }
+    private String sendMessage(String topicName, PubsubMessage pubsubMessage) {
+        Publisher publisher = registry.getPublisher(topicName)
+        log.info("Sending message to topic ${topicName}")
+        ApiFuture<String> future = publisher.publish(pubsubMessage)
+        return future.get()
     }
 
     private static PubsubMessage createPubsubMessage(String json, String topicName, String correlationId) {
