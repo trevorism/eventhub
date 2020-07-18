@@ -52,16 +52,16 @@ dependencies {
     implementation "org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion"
     implementation 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.11.1'
 
-    implementation 'io.swagger:swagger-jersey2-jaxrs:1.5.23'
-    implementation 'org.slf4j:slf4j-nop:1.7.28'
+    implementation 'io.swagger:swagger-jersey2-jaxrs:1.6.2'
+    implementation 'org.slf4j:slf4j-nop:1.7.30'
 
     acceptanceImplementation 'io.cucumber:cucumber-groovy:4.7.1'
     acceptanceImplementation 'com.trevorism:datastore-client:1.2.0'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 }
 
-appengine{
+appengine {
     deploy {
         projectId = "trevorism-eventhub"
         version = "1-3-1"
@@ -70,11 +70,15 @@ appengine{
     }
 }
 
-check{
+check {
     dependsOn('jacocoTestReport')
 }
 
 task deliver {
-    dependsOn("build","appengineDeploy", "acceptance")
+    dependsOn("build", "appengineDeploy", "acceptance")
     appengineDeploy.mustRunAfter("check")
+}
+
+acceptanceSettings {
+    stepDefinitionPackageRoot = "com/trevorism/eventhub" //default is com/trevorism/gcloud
 }
