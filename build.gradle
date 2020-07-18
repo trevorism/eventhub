@@ -56,6 +56,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-nop:1.7.28'
 
     acceptanceImplementation 'io.cucumber:cucumber-groovy:4.7.1'
+    acceptanceImplementation 'com.trevorism:datastore-client:1.2.0'
 
     testImplementation 'junit:junit:4.12'
 }

@@ -26,7 +26,7 @@ TestTopic testObject = new TestTopic(52, "testTopic", "testDescription")
 PasswordProvider passwordProvider = new PasswordProvider()
 CloseableHttpResponse response
 
-Given(~/^the eventhub application is alive with a base URL of "([^"]*)"$/) { String url ->
+Given(/the eventhub application is alive with a base URL of {url}/) { String url ->
     baseUrl = url
     String pong = ""
     try{
@@ -39,7 +39,7 @@ Given(~/^the eventhub application is alive with a base URL of "([^"]*)"$/) { Str
     assert pong == "pong"
 }
 
-Given(~/^the datastore application is alive$/) { ->
+Given(/the datastore application is alive/) { ->
     String pong = ""
     try{
         pong = new URL("http://datastore.trevorism.com/ping").text
@@ -51,14 +51,14 @@ Given(~/^the datastore application is alive$/) { ->
     assert pong == "pong"
 }
 
-When(~/^I post an event to "([^"]*)"$/) { String topic ->
+When(/I post an event to {topic}/) { String topic ->
     String json = gson.toJson(testObject)
     String url = "${baseUrl}/api/${topic}"
     ResponseUtils.closeSilently jsonHttpClient.post(url, json, ["Authorization":passwordProvider.password])
 
 }
 
-Then(~/^then the event is saved to the datastore within (\d+) seconds$/) { int delay ->
+Then(/then the event is saved to the datastore within {delay} seconds/) { int delay ->
     Thread.sleep(delay * 1000)
     Repository<TestTopic> repository = new FastDatastoreRepository<>(TestTopic)
     TestTopic topic = repository.get("52")
@@ -68,13 +68,13 @@ Then(~/^then the event is saved to the datastore within (\d+) seconds$/) { int d
     repository.delete("52")
 }
 
-When(~/^I post an event to "([^"]*)" with a correlationId$/) { String topic ->
+When(/I post an event to {topic} with a correlationId/) { String topic ->
     String json = gson.toJson(testObject)
     String url = "${baseUrl}/api/${topic}"
     response = jsonHttpClient.post(url, json, ["Authorization":passwordProvider.password,"X-Correlation-ID":correlationId])
 }
 
-Then(~/^the same correlationId is returned in the HTTP header$/) { ->
+Then(/the same correlationId is returned in the HTTP header/) { ->
     Header header = response.getFirstHeader("X-Correlation-ID")
     assert header.value == correlationId
     ResponseUtils.closeSilently response

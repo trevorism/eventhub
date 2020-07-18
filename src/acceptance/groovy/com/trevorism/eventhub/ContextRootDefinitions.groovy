@@ -10,7 +10,7 @@ this.metaClass.mixin(cucumber.api.groovy.EN)
 def contextRootContent
 def pingContent
 
-Given(~/^the eventhub application is alive$/) { ->
+Given(/the eventhub application is alive/) { ->
     try{
         new URL("http://event.trevorism.com/ping").text
     }
@@ -20,19 +20,19 @@ Given(~/^the eventhub application is alive$/) { ->
     }
 }
 
-When(~/^I navigate to "([^"]*)"$/) { String url ->
+When(/I navigate to {url}/) { String url ->
     contextRootContent = new URL(url).text
 }
 
-Then(~/^then a link to the help page is displayed$/) { ->
+Then(/then a link to the help page is displayed/) { ->
     assert contextRootContent
     assert contextRootContent.contains("/help")
 }
 
-When(~/^I ping the application deployed to "([^"]*)"$/) { String url ->
+When(/I ping the application deployed to {url}/) { String url ->
     pingContent = new URL("${url}/ping").text
 }
 
-Then(~/^pong is returned, to indicate the service is alive$/) { ->
+Then(/pong is returned, to indicate the service is alive/) { ->
     assert pingContent == "pong"
 }
