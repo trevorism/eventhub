@@ -1,12 +1,12 @@
 package com.trevorism.event.webapi.controller
 
-import com.trevorism.event.LocalAppEngineTestBase
+
 import org.junit.Test
 
 /**
  * @author tbrooks
  */
-class RootControllerTest extends LocalAppEngineTestBase{
+class RootControllerTest {
 
     @Test
     void testRootControllerDefault(){

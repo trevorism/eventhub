@@ -5,10 +5,17 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/trevorism/eventhub)
 ![GitHub top language](https://img.shields.io/github/languages/top/trevorism/eventhub)
 
-Latest Version: 1.2.0
+Latest Version: 1.3.0
 
 A web api which wraps google pub/sub. Administer topics and subscriptions, send events.
 
 This API is deployed here: [https://event.trevorism.com](https://event.trevorism.com)
+
+
+##How to build
+
+Create GOOGLE_APPLICATION_CREDENTIALS by following https://developers.google.com/accounts/docs/application-default-credentials
+
+Then: `gradle clean build`
 
 
