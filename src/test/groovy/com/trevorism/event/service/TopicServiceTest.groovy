@@ -21,6 +21,7 @@ class TopicServiceTest {
     }
 
     private void mockActualCalls() {
+        topicService.topicAdminClient.shutdown()
         topicService.topicAdminClient = [
                 createTopic: { name ->
                     if (!alreadyCreated) {

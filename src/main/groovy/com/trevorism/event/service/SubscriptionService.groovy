@@ -17,7 +17,7 @@ class SubscriptionService {
 
     boolean createSubscription(Subscriber subscriber) {
         try {
-            ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, subscriber.topic)
+            TopicName topicName = TopicName.of(EventService.PROJECT_ID, subscriber.topic)
             ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(EventService.PROJECT_ID, subscriber.name)
             PushConfig pushConfig = PushConfig.newBuilder().setPushEndpoint(subscriber.url).build()
             return subscriptionAdminClient.createSubscription(subscriptionName, topicName, pushConfig, Integer.valueOf(subscriber.ackDeadlineSeconds))
@@ -69,4 +69,12 @@ class SubscriptionService {
     }
 
 
+    Subscriber updateSubscription(String subscriptionId, Subscriber subscriber) {
+        if(deleteSubscription(subscriptionId)){
+            if(createSubscription(subscriber)){
+                return subscriber
+            }
+        }
+        return null
+    }
 }

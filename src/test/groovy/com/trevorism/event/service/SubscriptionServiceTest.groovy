@@ -22,6 +22,7 @@ class SubscriptionServiceTest {
     }
 
     private void mockActualCalls() {
+        subscriptionService.subscriptionAdminClient.shutdown()
         subscriptionService.subscriptionAdminClient = [
                 createSubscription: { n, t, p, a ->
                     if (!alreadyCreated) {
@@ -33,6 +34,7 @@ class SubscriptionServiceTest {
                 },
                 deleteSubscription: { def name ->
                     if (name.toString().contains(UNIT_TEST_SUBSCRIPTION_NAME)) {
+                        alreadyCreated = false
                         return true
                     }
                     return false
@@ -79,6 +81,14 @@ class SubscriptionServiceTest {
     void testDeleteSubscription() {
         assert subscriptionService.deleteSubscription(UNIT_TEST_SUBSCRIPTION_NAME)
         assert !subscriptionService.deleteSubscription("asdfdsaf")
+    }
+
+    @Test
+    void testUpdateSubscription() {
+        Subscriber subscriber = new Subscriber(UNIT_TEST_SUBSCRIPTION_NAME, UNIT_TEST_TOPIC_NAME, "https://trevorism-eventhub.appspot.com/hook/test", "60")
+
+        def result = subscriptionService.updateSubscription(UNIT_TEST_SUBSCRIPTION_NAME, subscriber)
+        assert result.ackDeadlineSeconds == "60"
     }
 
     class MockIterateAll {

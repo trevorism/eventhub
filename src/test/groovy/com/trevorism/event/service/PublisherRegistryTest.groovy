@@ -6,11 +6,15 @@ class PublisherRegistryTest {
 
     @Test
     void testGetPublisher() {
-        assert new PublisherRegistry().getPublisher("test")
+        def publisher = new PublisherRegistry().getPublisher("test")
+        assert publisher
+        publisher.shutdown()
     }
 
     @Test
     void testRegisterPublisher() {
-        assert new PublisherRegistry().registerPublisher("test")
+        def publisher =  new PublisherRegistry().registerPublisher("test")
+        assert publisher
+        publisher.shutdown()
     }
 }

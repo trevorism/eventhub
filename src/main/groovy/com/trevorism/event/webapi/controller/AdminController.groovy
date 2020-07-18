@@ -81,6 +81,15 @@ class AdminController {
         subscriptionService.getSubscription(subscriptionId)
     }
 
+    @ApiOperation(value = "Update a subscription **Secure")
+    @PUT
+    @Secure
+    @Path("subscription/{subscriptionId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Subscriber updateSubscription(@PathParam("subscriptionId") String subscriptionId, Subscriber subscriber){
+        subscriptionService.updateSubscription(subscriptionId, subscriber)
+    }
+
     @ApiOperation(value = "Delete a subscription **Secure")
     @DELETE
     @Secure

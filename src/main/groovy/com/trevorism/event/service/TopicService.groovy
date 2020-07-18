@@ -5,6 +5,7 @@ import com.google.pubsub.v1.ListTopicsRequest
 import com.google.pubsub.v1.ProjectName
 import com.google.pubsub.v1.ProjectTopicName
 import com.google.pubsub.v1.Topic
+import com.google.pubsub.v1.TopicName
 
 import java.util.logging.Logger
 
@@ -18,7 +19,7 @@ class TopicService {
 
     boolean createTopic(String topicId) {
         try {
-            ProjectTopicName topicName = ProjectTopicName.of(EventService.PROJECT_ID, topicId)
+            TopicName topicName = TopicName.of(EventService.PROJECT_ID, topicId)
             Topic topic = topicAdminClient.createTopic(topicName)
             return topic
         } catch (Exception e) {
