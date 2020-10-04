@@ -42,11 +42,11 @@ Given(~/^the eventhub application is alive with a base URL of "([^"]*)"$/) { Str
 Given(~/^the datastore application is alive$/) { ->
     String pong = ""
     try{
-        pong = new URL("http://datastore.trevorism.com/ping").text
+        pong = new URL("https://datastore.trevorism.com/ping").text
     }
     catch (Exception ignored){
         Thread.sleep(10000)
-        pong = new URL("http://datastore.trevorism.com/ping").text
+        pong = new URL("https://datastore.trevorism.com/ping").text
     }
     assert pong == "pong"
 }

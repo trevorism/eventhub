@@ -7,6 +7,7 @@ import com.google.pubsub.v1.ProjectTopicName
 import com.google.pubsub.v1.PubsubMessage
 import com.trevorism.event.webapi.serialize.JacksonConfig
 import com.trevorism.http.headers.HeadersHttpClient
+import com.trevorism.https.SecureHttpClient
 
 import javax.ws.rs.core.HttpHeaders
 import java.util.concurrent.TimeUnit
@@ -59,9 +60,9 @@ class EventService {
     }
 
     private static void addToken(HttpHeaders httpHeaders, LinkedHashMap<String, String> attributesMap) {
-        String bearerToken = httpHeaders.getHeaderString("Authorization")
-        if (bearerToken && bearerToken.startsWith("bearer "))
-            attributesMap.put("token", bearerToken.substring("bearer ".length()))
+        String bearerToken = httpHeaders.getHeaderString(SecureHttpClient.AUTHORIZATION)
+        if (bearerToken && bearerToken.startsWith(SecureHttpClient.BEARER_))
+            attributesMap.put("token", bearerToken.substring(SecureHttpClient.BEARER_.length()))
     }
 
 }
