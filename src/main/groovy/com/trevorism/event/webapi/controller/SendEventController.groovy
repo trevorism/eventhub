@@ -6,6 +6,7 @@ import com.trevorism.event.service.PublisherRegistry
 import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
 import com.trevorism.http.headers.HeadersHttpClient
+import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -37,7 +38,7 @@ class SendEventController{
 
     @ApiOperation(value = "Sends an event on the given topic **Secure")
     @POST
-    @Secure
+    @Secure(Roles.USER)
     @Path("{topic}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

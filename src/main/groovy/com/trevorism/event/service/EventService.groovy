@@ -20,9 +20,6 @@ class EventService {
 
     private PublisherRegistry registry
 
-    EventService(){
-        this(new PublisherRegistry())
-    }
     EventService(PublisherRegistry registry){
         this.registry = registry
     }

@@ -5,7 +5,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/trevorism/eventhub)
 ![GitHub top language](https://img.shields.io/github/languages/top/trevorism/eventhub)
 
-Latest Version: 1.4.0
+Latest Version: 1.5.0
 
 A web api which wraps google pub/sub. Administer topics and subscriptions, send events.
 
