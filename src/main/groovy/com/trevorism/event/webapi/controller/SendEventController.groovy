@@ -46,7 +46,7 @@ class SendEventController{
         topicService.createTopic(topic)
         subscriptionService.createSubscription(new Subscriber("store-${topic}", topic, "https://listen-dot-trevorism-eventhub.appspot.com/_ah/push-handlers/store_${topic}"))
         subscriptionService.createSubscription(new Subscriber("handle-${topic}", topic, "https://listen-dot-trevorism-eventhub.appspot.com/_ah/push-handlers/handle_${topic}"))
-        String response = eventService.sendEvent(topic, data, headers.getHeaderString(HeadersHttpClient.CORRELATION_ID_HEADER_KEY))
+        String response = eventService.sendEvent(topic, data, headers)
         log.info("Sent event: ${data}")
         return response
     }
