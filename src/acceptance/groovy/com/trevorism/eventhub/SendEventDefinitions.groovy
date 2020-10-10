@@ -73,9 +73,3 @@ When(~/^I post an event to "([^"]*)" with a correlationId$/) { String topic ->
     String url = "${baseUrl}/api/${topic}"
     response = jsonHttpClient.post(url, json, ["Authorization":passwordProvider.password,"X-Correlation-ID":correlationId])
 }
-
-Then(~/^the same correlationId is returned in the HTTP header$/) { ->
-    Header header = response.getFirstHeader("X-Correlation-ID")
-    assert header.value == correlationId
-    ResponseUtils.closeSilently response
-}

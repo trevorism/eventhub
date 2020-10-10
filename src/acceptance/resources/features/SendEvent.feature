@@ -12,4 +12,3 @@ Feature: Sending events
     And the datastore application is alive
     When I post an event to "testTopic"
     Then then the event is saved to the datastore within 10 seconds
-    And the same correlationId is returned in the HTTP header
