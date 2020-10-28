@@ -77,6 +77,15 @@ task deliver {
     appengineDeploy.mustRunAfter("check")
 }
 
+processResources{
+    doLast{
+        copy{
+            from "${System.getProperty("user.home")}/${project.name}/secrets.properties"
+            into "build/resources/main"
+        }
+    }
+}
+
 acceptanceSettings {
     stepDefinitionPackageRoot = "com/trevorism/eventhub" //default is com/trevorism/gcloud
 }

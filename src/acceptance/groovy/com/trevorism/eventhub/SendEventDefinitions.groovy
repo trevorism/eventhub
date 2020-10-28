@@ -4,12 +4,8 @@ import com.google.gson.Gson
 import com.trevorism.data.FastDatastoreRepository
 import com.trevorism.data.Repository
 import com.trevorism.eventhub.model.TestTopic
-import com.trevorism.http.headers.HeadersHttpClient
-import com.trevorism.http.headers.HeadersJsonHttpClient
-import com.trevorism.http.util.ResponseUtils
-import com.trevorism.secure.PasswordProvider
-import org.apache.http.Header
-import org.apache.http.client.methods.CloseableHttpResponse
+import com.trevorism.https.DefaultSecureHttpClient
+import com.trevorism.https.SecureHttpClient
 
 /**
  * @author tbrooks
@@ -21,10 +17,9 @@ this.metaClass.mixin(cucumber.api.groovy.EN)
 Gson gson = new Gson()
 String baseUrl
 String correlationId = "123456"
-HeadersHttpClient jsonHttpClient = new HeadersJsonHttpClient()
+SecureHttpClient secureHttpClient = new DefaultSecureHttpClient()
 TestTopic testObject = new TestTopic(52, "testTopic", "testDescription")
-PasswordProvider passwordProvider = new PasswordProvider()
-CloseableHttpResponse response
+def response
 
 Given(~/^the eventhub application is alive with a base URL of "([^"]*)"$/) { String url ->
     baseUrl = url
@@ -54,8 +49,7 @@ Given(~/^the datastore application is alive$/) { ->
 When(~/^I post an event to "([^"]*)"$/) { String topic ->
     String json = gson.toJson(testObject)
     String url = "${baseUrl}/api/${topic}"
-    ResponseUtils.closeSilently jsonHttpClient.post(url, json, ["Authorization":passwordProvider.password])
-
+    secureHttpClient.post(url, json)
 }
 
 Then(~/^then the event is saved to the datastore within (\d+) seconds$/) { int delay ->
@@ -71,5 +65,5 @@ Then(~/^then the event is saved to the datastore within (\d+) seconds$/) { int d
 When(~/^I post an event to "([^"]*)" with a correlationId$/) { String topic ->
     String json = gson.toJson(testObject)
     String url = "${baseUrl}/api/${topic}"
-    response = jsonHttpClient.post(url, json, ["Authorization":passwordProvider.password,"X-Correlation-ID":correlationId])
+    response = secureHttpClient.post(url, json, correlationId)
 }
