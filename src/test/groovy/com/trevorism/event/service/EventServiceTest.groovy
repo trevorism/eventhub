@@ -12,8 +12,7 @@ class EventServiceTest {
 
     @Test
     void testCreatePubsubMessage() {
-        PublisherRegistry publisherRegistry = new PublisherRegistry()
-        EventService eventService = new EventService(publisherRegistry);
+        EventService eventService = new EventService()
 
         PubsubMessage message = eventService.createPubsubMessage("{}","unitTestTopic", [getHeaderString: {input ->
             if(input == "X-Correlation-ID"){
@@ -27,7 +26,5 @@ class EventServiceTest {
         assert message.getAttributesMap()["topic"] == "unitTestTopic"
         assert message.getAttributesMap()["correlationId"] == "3"
         assert message.getAttributesMap()["token"] == "eyaskdfjl.eyasdfr.eysdfsg"
-
-        publisherRegistry.shutdown()
     }
 }

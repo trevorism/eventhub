@@ -3,6 +3,7 @@ package com.trevorism.event.service
 import com.google.api.core.ApiFuture
 import com.google.cloud.pubsub.v1.Publisher
 import com.google.protobuf.ByteString
+import com.google.pubsub.v1.ProjectTopicName
 import com.google.pubsub.v1.PubsubMessage
 import com.trevorism.event.webapi.serialize.JacksonConfig
 import com.trevorism.http.headers.HeadersHttpClient
@@ -19,12 +20,6 @@ class EventService {
     static final String PROJECT_ID = "trevorism-eventhub"
     private static final Logger log = Logger.getLogger(EventService.class.name)
 
-    private PublisherRegistry registry
-
-    EventService(PublisherRegistry registry){
-        this.registry = registry
-    }
-
     String sendEvent(String topicName, Map<String, Object> data, HttpHeaders httpHeaders) {
         String json = JacksonConfig.objectMapper.writeValueAsString(data)
         PubsubMessage pubsubMessage = createPubsubMessage(json, topicName, httpHeaders)
@@ -32,7 +27,8 @@ class EventService {
     }
 
     private String sendMessage(String topicName, PubsubMessage pubsubMessage) {
-        Publisher publisher = registry.getPublisher(topicName)
+        ProjectTopicName topic = ProjectTopicName.of(EventService.PROJECT_ID, topicName)
+        Publisher publisher = Publisher.newBuilder(topic).build()
         log.info("Sending message to topic ${topicName}")
         ApiFuture<String> future = publisher.publish(pubsubMessage)
         publisher.shutdown()
@@ -61,7 +57,7 @@ class EventService {
 
     private static def addToken(HttpHeaders httpHeaders, Map attributesMap) {
         String bearerToken = httpHeaders.getHeaderString(SecureHttpClient.AUTHORIZATION)
-        if (bearerToken && bearerToken.startsWith(SecureHttpClient.BEARER_))
+        if (bearerToken && bearerToken.toLowerCase().startsWith(SecureHttpClient.BEARER_))
             attributesMap.put("token", bearerToken.substring(SecureHttpClient.BEARER_.length()))
         return attributesMap
     }

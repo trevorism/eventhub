@@ -2,7 +2,7 @@ package com.trevorism.event.webapi.controller
 
 import com.trevorism.event.model.Subscriber
 import com.trevorism.event.service.EventService
-import com.trevorism.event.service.PublisherRegistry
+
 import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
 import com.trevorism.secure.Roles
@@ -32,8 +32,7 @@ class SendEventController{
 
     private final TopicService topicService = new TopicService()
     private final SubscriptionService subscriptionService = new SubscriptionService()
-    private final PublisherRegistry publisherRegistry = new PublisherRegistry()
-    private final EventService eventService = new EventService(publisherRegistry)
+    private final EventService eventService = new EventService()
 
     @ApiOperation(value = "Sends an event on the given topic **Secure")
     @POST
@@ -48,12 +47,6 @@ class SendEventController{
         String response = eventService.sendEvent(topic, data, headers)
         log.info("Sent event: ${data}")
         return response
-    }
-
-    @PreDestroy
-    void preDestroy() {
-        log.info("Shutting down each registered event publisher")
-        publisherRegistry.shutdown()
     }
 
 }
