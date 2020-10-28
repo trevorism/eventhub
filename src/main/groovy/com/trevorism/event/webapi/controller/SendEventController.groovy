@@ -5,7 +5,6 @@ import com.trevorism.event.service.EventService
 import com.trevorism.event.service.PublisherRegistry
 import com.trevorism.event.service.SubscriptionService
 import com.trevorism.event.service.TopicService
-import com.trevorism.http.headers.HeadersHttpClient
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.swagger.annotations.Api

@@ -35,6 +35,7 @@ class EventService {
         Publisher publisher = registry.getPublisher(topicName)
         log.info("Sending message to topic ${topicName}")
         ApiFuture<String> future = publisher.publish(pubsubMessage)
+        publisher.shutdown()
         return future.get()
     }
 
