@@ -36,7 +36,7 @@ class SendEventController{
 
     @ApiOperation(value = "Sends an event on the given topic **Secure")
     @POST
-    @Secure(Roles.USER)
+    @Secure(value = Roles.USER, allowInternal = true)
     @Path("{topic}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
