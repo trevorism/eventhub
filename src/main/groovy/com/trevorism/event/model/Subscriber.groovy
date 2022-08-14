@@ -16,6 +16,6 @@ class Subscriber {
     @ApiModelProperty(value = "The url to route the event. Must be HTTPS", dataType = "string")
     String url
     @ApiModelProperty(value = "String value for acknowledgement deadline", dataType = "string")
-    String ackDeadlineSeconds = "10"
+    String ackDeadlineSeconds = "90"
 
 }
